@@ -1,15 +1,16 @@
-from rest_framework import viewsets, status
+from django.http import HttpResponse
+from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Food
-from .serializers import FoodSerializer
+from .models import Food, Category
+from .serializers import FoodSerializer, CategorySerializer
 
 
 def index(request):
     return HttpResponse("Poke Shop")
 
 
-class FoodViewSet(viewsets.ViewSet, generics.ListAPIView):
+class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
     queryset = Food.objects.all()
     serializer_class = FoodSerializer
 
@@ -22,3 +23,8 @@ class FoodViewSet(viewsets.ViewSet, generics.ListAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({"error": "No search term provided."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
