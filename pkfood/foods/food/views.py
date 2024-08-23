@@ -1,9 +1,11 @@
+from _ast import Store
+
 from django.http import HttpResponse
 from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Food, Category
-from .serializers import FoodSerializer, CategorySerializer
+from .models import Food, Category, StoreDetail
+from .serializers import FoodSerializer, CategorySerializer, StoreSerializer
 
 
 def index(request):
@@ -28,3 +30,8 @@ class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView
 class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+class StoreViewSet(viewsets.ViewSet, generics.ListAPIView):
+    queryset = StoreDetail.objects.all()
+    serializer_class = StoreSerializer
