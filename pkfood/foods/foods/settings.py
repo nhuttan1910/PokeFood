@@ -39,7 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'food.apps.FoodConfig',
     'rest_framework',
+    'oauth2_provider',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    )
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -136,3 +143,7 @@ cloudinary.config(
 )
 
 AUTH_USER_MODEL = 'food.Account'
+
+CLIENT_ID = 'wQH1wAdg0DCu6Z3nTZYF4vIJTOQpHWVvUO6X5qAK'
+
+CLIENT_SECRET = 'Hxc5hmxcODDfMbLYbpfhrD2i6vWui85QpCvOcYDJ9BL1yn6YSkcSWz2ZIIXY92iEnJTfmvbHgUHPU5gYI7zou6XvAqintfZGwiUlAFuzRQzydnecpzCXDM21ykKjwIju'

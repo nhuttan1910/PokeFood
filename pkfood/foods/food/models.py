@@ -41,13 +41,14 @@ class Order(BaseModel):
     state = models.BooleanField(default=False)
     pay = models.BooleanField(default=False)
     pay_date = models.DateField(auto_now=False, auto_now_add=False, default="2000-10-10")
+    address = models.CharField(max_length=100, null=False, default="None")
+
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
 
 
 class OrderDetail(BaseModel):
     quantity = models.IntegerField(null=False, default=0)
     amount = models.IntegerField(null=False, default=0)
-    address = models.CharField(max_length=100, null=False, default="None")
 
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
     food = models.ForeignKey(Food, on_delete=models.CASCADE, null=True)
