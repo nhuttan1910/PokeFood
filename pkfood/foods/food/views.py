@@ -109,6 +109,7 @@ class CartViewSet(viewsets.ViewSet,generics.ListAPIView,
 
         return Response(CartDetailSerializer(cart_detail).data, status=status.HTTP_200_OK)
 
+
 class OrderViewSet(viewsets.ViewSet,generics.ListAPIView,
                   generics.CreateAPIView,
                   generics.RetrieveAPIView):
