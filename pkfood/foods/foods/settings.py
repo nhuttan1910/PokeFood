@@ -87,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pokeshop',
         'USER': 'root',
-        'PASSWORD': 'admin123',
+        'PASSWORD': 'Admin@123',
         'HOST': ''
     }
 }

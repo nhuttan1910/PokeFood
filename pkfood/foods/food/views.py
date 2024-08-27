@@ -5,6 +5,7 @@ from rest_framework.decorators import action
 from .models import *
 from .serializers import *
 from rest_framework.parsers import MultiPartParser
+from food import serializers, paginator
 
 
 def index(request):
@@ -15,17 +16,19 @@ class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView
     queryset = Food.objects.all()
     serializer_class = FoodSerializer
 
-    @action(methods=['get'], url_path='find', detail=False)
+    @action(methods=['get'], url_path='search', detail=False)
     def get_food(self, request):
         kw = request.query_params.get('kw', None)
+
         if kw:
-            find_food = Food.objects.filter(name__icontains=kw)
-            serializer = FoodSerializer(find_food, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            food = Food.objects.filter(name__icontains=kw, active=True)
+            if food.exists():
+                serializer = FoodSerializer(food, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "No food found with that name."}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response({"error": "No search term provided."}, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
     queryset = Category.objects.all()
