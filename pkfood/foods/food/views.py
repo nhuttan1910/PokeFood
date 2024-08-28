@@ -61,6 +61,35 @@ class AccountViewSet(viewsets.ViewSet,
 
         return Response(AccountSerializer(user).data)
 
+    @action(methods=['post'], detail=False, url_path='create-account')
+    def create_account(self, request):
+        fn = request.data.get('firstname', 'new')
+        ln = request.data.get('lastname', 'account')
+        un = request.data.get('username')
+        pw = request.data.get('password')
+        e = request.data.get('email')
+        a = request.data.get('address')
+        avatar = request.data.get('avatar')
+        phone = request.data.get('phone')
+
+        # Tạo người dùng với các thông tin cơ bản
+        user = Account.objects.create(
+            first_name=fn,
+            last_name=ln,
+            username=un,
+            email=e,
+            address=a,
+            phone=phone,
+            avatar=avatar
+        )
+
+        # Thiết lập mật khẩu bằng phương thức set_password()
+        user.set_password(pw)
+        user.save()
+        cart = Cart.objects.create(account=user)
+        cart.save()
+        return Response({"message": "Account created successfully"}, status=status.HTTP_201_CREATED)
+
 
 class CartViewSet(viewsets.ViewSet,generics.ListAPIView,
                   generics.CreateAPIView,
@@ -110,11 +139,19 @@ class CartViewSet(viewsets.ViewSet,generics.ListAPIView,
         return Response(CartDetailSerializer(cart_detail).data, status=status.HTTP_200_OK)
 
 
-class OrderViewSet(viewsets.ViewSet,generics.ListAPIView,
+class OrderViewSet(viewsets.ViewSet, generics.ListAPIView,
                   generics.CreateAPIView,
                   generics.RetrieveAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+    @action(methods=['patch'], url_path='is_confirm', detail=False)
+    def confirm(self, request):
+        order_id = request.data.get('order_id')
+        order = Order.objects.get(id=order_id)
+        order.is_confirmed = True
+        order.save()
+        return Response(OrderSerializer(order).data, status=status.HTTP_200_OK)
 
 
 
