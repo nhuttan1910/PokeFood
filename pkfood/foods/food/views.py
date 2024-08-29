@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from rest_framework import viewsets, status, generics, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from .models import *
 from .serializers import *
 from rest_framework.parsers import MultiPartParser
@@ -118,6 +119,52 @@ class OrderViewSet(viewsets.ViewSet,generics.ListAPIView,
                   generics.RetrieveAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+
+    class OrderViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
+        queryset = Order.objects.all()
+        serializer_class = OrderSerializer
+
+        def create(self, request, *args, **kwargs):
+            user = request.user
+
+            try:
+                cart = Cart.objects.get(account=user)
+            except Cart.DoesNotExist:
+                return Response({"error": "No cart found for the user."}, status=status.HTTP_404_NOT_FOUND)
+
+            cart_details = CartDetail.objects.filter(cart=cart)
+            if not cart_details.exists():
+                return Response({"error": "Cart is empty."}, status=status.HTTP_400_BAD_REQUEST)
+
+            order_data = {
+                "address": request.data.get('address', cart.address),
+                "pay_date": request.data.get('pay_date', None),
+            }
+            serializer = self.get_serializer(data=order_data)
+            serializer.is_valid(raise_exception=True)
+            order = serializer.save(account=user)
+
+            order_details = []
+            for cart_detail in cart_details:
+                food = cart_detail.food
+                quantity = cart_detail.quantity
+                amount = food.price * quantity
+                order_detail = OrderDetail(order=order, food=food, quantity=quantity, amount=amount)
+                order_details.append(order_detail)
+
+            OrderDetail.objects.bulk_create(order_details)
+
+            cart_details.delete()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class OrderDetailViewSet(viewsets.ViewSet, generics.ListAPIView,
+                       generics.CreateAPIView,
+                       generics.RetrieveAPIView):
+        queryset = OrderDetail.objects.all()
+        serializer_class = OrderDetailSerializer
 
 
 
