@@ -2,9 +2,11 @@ from django.http import HttpResponse
 from rest_framework import viewsets, status, generics, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from .models import *
 from .serializers import *
 from rest_framework.parsers import MultiPartParser
+from food import serializers, paginator
 
 
 def index(request):
@@ -15,17 +17,19 @@ class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView
     queryset = Food.objects.all()
     serializer_class = FoodSerializer
 
-    @action(methods=['get'], url_path='find', detail=False)
+    @action(methods=['get'], url_path='search', detail=False)
     def get_food(self, request):
         kw = request.query_params.get('kw', None)
+
         if kw:
-            find_food = Food.objects.filter(name__icontains=kw)
-            serializer = FoodSerializer(find_food, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            food = Food.objects.filter(name__icontains=kw, active=True)
+            if food.exists():
+                serializer = FoodSerializer(food, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "No food found with that name."}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response({"error": "No search term provided."}, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
     queryset = Category.objects.all()
@@ -145,6 +149,46 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView,
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
+    @action(methods=['post'], url_path='create-order', detail=False)
+    def create_order(self, request):
+        user_id = request.user.id
+
+        try:
+            user = Account.objects.get(id=user_id)
+        except Account.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            cart = Cart.objects.get(account=user)
+        except Cart.DoesNotExist:
+            return Response({"error": "No cart found for the user."}, status=status.HTTP_404_NOT_FOUND)
+
+        cart_details = CartDetail.objects.filter(cart=cart)
+        if not cart_details.exists():
+            return Response({"error": "Cart is empty."}, status=status.HTTP_400_BAD_REQUEST)
+
+        order_data = {
+            "address": request.data.get('address', user.address),
+            "pay_date": request.data.get('pay_date', None),
+        }
+        serializer = self.get_serializer(data=order_data)
+        serializer.is_valid(raise_exception=True)
+        order = serializer.save(account=user)
+
+        order_details = []
+        for cart_detail in cart_details:
+            food = cart_detail.food
+            quantity = cart_detail.quantity
+            amount = food.price * quantity
+            order_detail = OrderDetail(order=order, food=food, quantity=quantity, amount=amount)
+            order_details.append(order_detail)
+
+        OrderDetail.objects.bulk_create(order_details)
+
+        cart_details.delete()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     @action(methods=['patch'], url_path='is_confirm', detail=False)
     def confirm(self, request):
         order_id = request.data.get('order_id')
@@ -152,6 +196,14 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView,
         order.is_confirmed = True
         order.save()
         return Response(OrderSerializer(order).data, status=status.HTTP_200_OK)
+
+
+
+class OrderDetailViewSet(viewsets.ViewSet, generics.ListAPIView,
+                       generics.CreateAPIView,
+                       generics.RetrieveAPIView):
+        queryset = OrderDetail.objects.all()
+        serializer_class = OrderDetailSerializer
 
 
 

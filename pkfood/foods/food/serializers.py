@@ -67,3 +67,9 @@ class OrderDetailSerializer(ModelSerializer):
         model = OrderDetail
         fields = ['id', 'quantity', 'amount', 'order', 'food']
 
+
+class AdvertisementSerializer(ModelSerializer):
+    class Meta:
+        model = Advertisement
+        fields = "__all__"
+
