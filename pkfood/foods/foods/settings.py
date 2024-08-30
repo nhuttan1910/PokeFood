@@ -33,7 +33,7 @@ MOMO_ACCESS_KEY = "F8BBA842ECF85"
 MOMO_SECRET_KEY = "K951B6PE1waDMi640xX08PD3vg6EkVlz"
 MOMO_ENDPOINT = "https://test-payment.momo.vn/v2/gateway/api/create"
 RETURN_URL = "http://localhost:3000/payment-return"
-NOTIFY_URL = "http://localhost:8000/payment-notify"
+NOTIFY_URL = "http://127.0.0.1:8000"
 
 
 # Application definition
@@ -153,7 +153,7 @@ cloudinary.config(
 AUTH_USER_MODEL = 'food.Account'
 
 #CLIENT_ID = 'wQH1wAdg0DCu6Z3nTZYF4vIJTOQpHWVvUO6X5qAK'
-CLIENT_ID = 'lX9UvQVCYHVe8uIr18jfrvoeNx7Kp2okFNOH8N7O'
+CLIENT_ID = 'JVueeMClIZzEAiLQB0efRHvFQuN9x2nfZe2CFfJ0'
 
 #CLIENT_SECRET = 'Hxc5hmxcODDfMbLYbpfhrD2i6vWui85QpCvOcYDJ9BL1yn6YSkcSWz2ZIIXY92iEnJTfmvbHgUHPU5gYI7zou6XvAqintfZGwiUlAFuzRQzydnecpzCXDM21ykKjwIju'
-CLIENT_SECRET = 'hxRuyEC9TeeBqEmc3YPAgphW7hMQVdRLNhZ6dhuZHXiKEyeHNlLCimz9t33XfJmT4HEXa2JH2bCO8ONthb9QnlUlBknstfmgHgUi1ZeZXZIVK9kiAaJY9KBRTRb6n4yj'
+CLIENT_SECRET = 'vKfJNyVrvfTYvzhjtx5yioGVG3g0csXzXBRdwW5dKLv2QvlXBHEbqRJylQsyyEak0L1x0S1hyN3bxc8n3XIxh8Ua0HtCT95WsDLRxgVwOAZtmKJtNDgWrr6ABsgy15r9'

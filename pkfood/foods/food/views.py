@@ -7,6 +7,14 @@ from .models import *
 from .serializers import *
 from rest_framework.parsers import MultiPartParser
 from food import serializers, paginator
+import hmac, uuid, hashlib, requests, json,logging
+from django.conf import settings
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.utils import timezone
 
 
 def index(request):
@@ -143,6 +151,12 @@ class CartViewSet(viewsets.ViewSet,generics.ListAPIView,
         return Response(CartDetailSerializer(cart_detail).data, status=status.HTTP_200_OK)
 
 
+class CartDetailsViewSet(viewsets.ViewSet, generics.ListAPIView,
+                  generics.CreateAPIView,
+                  generics.RetrieveAPIView):
+    queryset = CartDetail.objects.all()
+    serializer_class = CartDetailSerializer
+
 class OrderViewSet(viewsets.ViewSet, generics.ListAPIView,
                   generics.CreateAPIView,
                   generics.RetrieveAPIView):
@@ -168,7 +182,7 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView,
             return Response({"error": "Cart is empty."}, status=status.HTTP_400_BAD_REQUEST)
 
         order_data = {
-            "address": request.data.get('address', user.address),
+            "address": request.data.get('address'),
             "pay_date": request.data.get('pay_date', None),
         }
         serializer = self.get_serializer(data=order_data)
@@ -204,6 +218,91 @@ class OrderDetailViewSet(viewsets.ViewSet, generics.ListAPIView,
                        generics.RetrieveAPIView):
         queryset = OrderDetail.objects.all()
         serializer_class = OrderDetailSerializer
+
+
+class PayViewSet(viewsets.ViewSet):
+
+    def generate_signature(self, raw_data, secret_key):
+        return hmac.new(secret_key.encode('utf-8'), raw_data.encode('utf-8'), hashlib.sha256).hexdigest()
+
+    @action(methods=['POST'], detail=False, url_path='create-payment')
+    def create_payment(self, request):
+        # Lấy thông tin từ request
+        order_id = request.data.get('id')
+        if not order_id:
+            return Response({"error": "Order ID is required."}, status=400)
+        try:
+            order = Order.objects.get(id=order_id)
+        except Order.DoesNotExist:
+            return Response({"error": "Order not found."}, status=404)
+
+        # Số tiền thanh toán
+        order_details = OrderDetail.objects.filter(order=order)
+        total_amount = sum(detail.amount for detail in order_details)
+
+        # Tạo request_id duy nhất cho lần thanh toán này
+        request_id = str(uuid.uuid4())
+
+        unique_order_id = f"{order_id}_{uuid.uuid4().hex[:8]}"
+
+        # Tạo chữ ký
+        raw_signature = f"accessKey={settings.MOMO_ACCESS_KEY}&amount={total_amount}&extraData=&ipnUrl={settings.NOTIFY_URL}&orderId={unique_order_id}&orderInfo=Thanh toan don hang&partnerCode={settings.MOMO_PARTNER_CODE}&redirectUrl={settings.RETURN_URL}&requestId={request_id}&requestType=captureWallet"
+        signature = self.generate_signature(raw_signature, settings.MOMO_SECRET_KEY)
+
+        # Payload gửi tới MoMo
+        payload = {
+            "partnerCode": settings.MOMO_PARTNER_CODE,
+            "accessKey": settings.MOMO_ACCESS_KEY,
+            "requestId": request_id,
+            "amount": total_amount,
+            "orderId": unique_order_id,
+            "orderInfo": "Thanh toan don hang",
+            "redirectUrl": settings.RETURN_URL,
+            "ipnUrl": settings.NOTIFY_URL,
+            "extraData": "",
+            "requestType": "captureWallet",
+            "signature": signature
+        }
+
+        # Gửi yêu cầu đến MoMo
+        response = requests.post(settings.MOMO_ENDPOINT, json=payload)
+        data = response.json()
+
+
+        # Kiểm tra phản hồi từ MoMo
+        if data.get('resultCode') == 0:
+            return Response({"payUrl": data['payUrl']})  # Trả về URL thanh toán
+        else:
+            return Response({"error": data.get('message')}, status=400)
+
+    @method_decorator(csrf_exempt, name='dispatch')
+    @action(methods=['POST'], detail=False, url_path='payment-callback')
+    def payment_callback(self, request):
+        data = request.data
+
+        # Kiểm tra chữ ký từ MoMo
+        raw_signature = f"amount={data['amount']}&orderId={data['orderId']}&orderInfo={data['orderInfo']}&orderType={data['orderType']}&partnerCode={data['partnerCode']}&requestId={data['requestId']}&responseTime={data['responseTime']}&resultCode={data['resultCode']}&transId={data['transId']}"
+        signature = self.generate_signature(raw_signature, settings.MOMO_SECRET_KEY)
+
+        if signature != data['signature']:
+            return Response({"error": "Invalid signature."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Kiểm tra mã kết quả từ MoMo
+        if data['resultCode'] == 0:
+            # Thanh toán thành công
+            order_id = data['orderId']
+            try:
+                order = Order.objects.get(id=order_id)
+                order.pay = True
+                order.pay_date = timezone.now()
+                order.save()
+                return Response({"message": "Payment successful."}, status=status.HTTP_200_OK)
+            except Order.DoesNotExist:
+                return Response({"error": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            # Thanh toán thất bại
+            return Response({"error": data.get('message')}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
