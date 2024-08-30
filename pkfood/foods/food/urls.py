@@ -2,7 +2,7 @@ from django.urls import path, include
 from . import views
 from rest_framework import routers
 from rest_framework.routers import DefaultRouter
-
+from .admin import admin_site
 router = routers.DefaultRouter()
 router.register('food', views.FoodViewSet)
 router.register('category', views.CategoryViewSet)
@@ -13,4 +13,5 @@ router.register('order',views.OrderViewSet, basename='order')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('admin/', admin_site.urls),
 ]
