@@ -149,6 +149,46 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView,
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
+    @action(methods=['post'], url_path='create-order', detail=False)
+    def create_order(self, request):
+        user_id = request.user.id
+
+        try:
+            user = Account.objects.get(id=user_id)
+        except Account.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            cart = Cart.objects.get(account=user)
+        except Cart.DoesNotExist:
+            return Response({"error": "No cart found for the user."}, status=status.HTTP_404_NOT_FOUND)
+
+        cart_details = CartDetail.objects.filter(cart=cart)
+        if not cart_details.exists():
+            return Response({"error": "Cart is empty."}, status=status.HTTP_400_BAD_REQUEST)
+
+        order_data = {
+            "address": request.data.get('address', user.address),
+            "pay_date": request.data.get('pay_date', None),
+        }
+        serializer = self.get_serializer(data=order_data)
+        serializer.is_valid(raise_exception=True)
+        order = serializer.save(account=user)
+
+        order_details = []
+        for cart_detail in cart_details:
+            food = cart_detail.food
+            quantity = cart_detail.quantity
+            amount = food.price * quantity
+            order_detail = OrderDetail(order=order, food=food, quantity=quantity, amount=amount)
+            order_details.append(order_detail)
+
+        OrderDetail.objects.bulk_create(order_details)
+
+        cart_details.delete()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     @action(methods=['patch'], url_path='is_confirm', detail=False)
     def confirm(self, request):
         order_id = request.data.get('order_id')
@@ -157,44 +197,6 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView,
         order.save()
         return Response(OrderSerializer(order).data, status=status.HTTP_200_OK)
 
-
-    class OrderViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
-        queryset = Order.objects.all()
-        serializer_class = OrderSerializer
-
-        def create(self, request, *args, **kwargs):
-            user = request.user
-
-            try:
-                cart = Cart.objects.get(account=user)
-            except Cart.DoesNotExist:
-                return Response({"error": "No cart found for the user."}, status=status.HTTP_404_NOT_FOUND)
-
-            cart_details = CartDetail.objects.filter(cart=cart)
-            if not cart_details.exists():
-                return Response({"error": "Cart is empty."}, status=status.HTTP_400_BAD_REQUEST)
-
-            order_data = {
-                "address": request.data.get('address', cart.address),
-                "pay_date": request.data.get('pay_date', None),
-            }
-            serializer = self.get_serializer(data=order_data)
-            serializer.is_valid(raise_exception=True)
-            order = serializer.save(account=user)
-
-            order_details = []
-            for cart_detail in cart_details:
-                food = cart_detail.food
-                quantity = cart_detail.quantity
-                amount = food.price * quantity
-                order_detail = OrderDetail(order=order, food=food, quantity=quantity, amount=amount)
-                order_details.append(order_detail)
-
-            OrderDetail.objects.bulk_create(order_details)
-
-            cart_details.delete()
-
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class OrderDetailViewSet(viewsets.ViewSet, generics.ListAPIView,
