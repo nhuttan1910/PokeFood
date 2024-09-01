@@ -95,7 +95,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pokeshop',
         'USER': 'root',
-        'PASSWORD': 'Admin@123',
+        'PASSWORD': 'admin123', #'Admin@123'
         'HOST': ''
     }
 }
@@ -152,8 +152,8 @@ cloudinary.config(
 
 AUTH_USER_MODEL = 'food.Account'
 
-#CLIENT_ID = 'wQH1wAdg0DCu6Z3nTZYF4vIJTOQpHWVvUO6X5qAK'
-CLIENT_ID = 'lX9UvQVCYHVe8uIr18jfrvoeNx7Kp2okFNOH8N7O'
+CLIENT_ID = 'wQH1wAdg0DCu6Z3nTZYF4vIJTOQpHWVvUO6X5qAK'
+# CLIENT_ID = 'lX9UvQVCYHVe8uIr18jfrvoeNx7Kp2okFNOH8N7O'
 
-#CLIENT_SECRET = 'Hxc5hmxcODDfMbLYbpfhrD2i6vWui85QpCvOcYDJ9BL1yn6YSkcSWz2ZIIXY92iEnJTfmvbHgUHPU5gYI7zou6XvAqintfZGwiUlAFuzRQzydnecpzCXDM21ykKjwIju'
-CLIENT_SECRET = 'hxRuyEC9TeeBqEmc3YPAgphW7hMQVdRLNhZ6dhuZHXiKEyeHNlLCimz9t33XfJmT4HEXa2JH2bCO8ONthb9QnlUlBknstfmgHgUi1ZeZXZIVK9kiAaJY9KBRTRb6n4yj'
+CLIENT_SECRET = 'Hxc5hmxcODDfMbLYbpfhrD2i6vWui85QpCvOcYDJ9BL1yn6YSkcSWz2ZIIXY92iEnJTfmvbHgUHPU5gYI7zou6XvAqintfZGwiUlAFuzRQzydnecpzCXDM21ykKjwIju'
+# CLIENT_SECRET = 'hxRuyEC9TeeBqEmc3YPAgphW7hMQVdRLNhZ6dhuZHXiKEyeHNlLCimz9t33XfJmT4HEXa2JH2bCO8ONthb9QnlUlBknstfmgHgUi1ZeZXZIVK9kiAaJY9KBRTRb6n4yj'

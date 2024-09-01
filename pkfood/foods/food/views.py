@@ -6,7 +6,7 @@ from rest_framework.exceptions import ValidationError
 from .models import *
 from .serializers import *
 from rest_framework.parsers import MultiPartParser
-from food import serializers, paginator
+from .paginator import *
 
 
 def index(request):
@@ -67,8 +67,13 @@ class AccountViewSet(viewsets.ViewSet,
 
     @action(methods=['post'], detail=False, url_path='create-account')
     def create_account(self, request):
-        fn = request.data.get('firstname', 'new')
-        ln = request.data.get('lastname', 'account')
+        fn = request.data.get('first_name')
+        if fn is None:
+            fn= 'new'
+
+        ln = request.data.get('last_name')
+        if ln is None:
+            ln = 'account'
         un = request.data.get('username')
         pw = request.data.get('password')
         e = request.data.get('email')
@@ -96,7 +101,6 @@ class AccountViewSet(viewsets.ViewSet,
 
 
 class CartViewSet(viewsets.ViewSet,generics.ListAPIView,
-                  generics.CreateAPIView,
                   generics.RetrieveAPIView):
     serializer_class = CartSerializer
     queryset = Cart.objects.all()
@@ -207,3 +211,6 @@ class OrderDetailViewSet(viewsets.ViewSet, generics.ListAPIView,
 
 
 
+class CartDetailViewSet(viewsets.ViewSet, generics.ListAPIView,):
+    queryset = CartDetail.objects.all()
+    serializer_class = CartDetailSerializer
