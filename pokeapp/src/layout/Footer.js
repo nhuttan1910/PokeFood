@@ -8,16 +8,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faInstagram, faDiscord } from '@fortawesome/free-brands-svg-icons';
 
 const Footer = () => {
-  const [logo, setLogo] = useState('');
+  const [logoInfo, setLogoInfo] = useState('');
 
   useEffect(() => {
     const fetchLogo = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:8000/store');
+        const res = await fetch('http://127.0.0.1:8000/store/');
         const data = await res.json();
         if (data && data.length > 0) {
           const cloudinaryBaseURL = 'https://res.cloudinary.com/di0aqgf2u/';
-          setLogo(cloudinaryBaseURL + data[0].logo);
+          setLogoInfo(cloudinaryBaseURL + data[0].logo);
         }
       } catch (error) {
         console.error('Failed to fetch logo URL:', error);
@@ -31,7 +31,7 @@ const Footer = () => {
             <div class="footer-container">
                 <div class="footer-container-40">
                     <div className="footer-container-40-header">
-                        <img src={logo} alt="" className="footer-container-icon" />
+                        <img src={logoInfo} alt="" className="footer-container-icon" />
                     </div>
                     <h1 class="footer-container-text">Đăng Ký Nhận Thông Tin Khuyến Mãi</h1>
                     <div class="footer-container-content">
