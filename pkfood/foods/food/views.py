@@ -21,7 +21,7 @@ def index(request):
     return HttpResponse("Poke Shop")
 
 
-class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
+class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView, generics.DestroyAPIView):
     queryset = Food.objects.all()
     serializer_class = FoodSerializer
 
