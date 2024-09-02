@@ -33,7 +33,7 @@ MOMO_ACCESS_KEY = "F8BBA842ECF85"
 MOMO_SECRET_KEY = "K951B6PE1waDMi640xX08PD3vg6EkVlz"
 MOMO_ENDPOINT = "https://test-payment.momo.vn/v2/gateway/api/create"
 RETURN_URL = "http://localhost:3000/payment-return"
-NOTIFY_URL = "http://localhost:8000/payment-notify"
+NOTIFY_URL = "http://127.0.0.1:8000"
 
 
 # Application definition

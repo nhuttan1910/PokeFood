@@ -1,0 +1,155 @@
+:root{
+    --primary-color: #EE4B2D;
+    --white-color: #fff;
+    --black-color: #000;
+    --text-color: #333;
+    --border-color: #dbdbdb;
+
+    --header-height: 120px;
+    --header-nav: 34px;
+    --header-with-search-height: calc(var(--header-height) - var(--header-nav));
+}
+
+* {
+    box-sizing: inherit;
+}
+
+html {
+    font-size: 62.5%;
+    line-height: 1.6rem;
+    font-family: 'Roboto', sans-serif;
+    box-sizing : border-box;
+}
+
+.grid {
+    width: 1200px;
+    max-width: 100%;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.grid-1 {
+    width: 1200px;
+    max-width: 100%;
+    margin: 30px auto;
+    display: flex;
+}
+
+.grid-2 {
+    width: 1200px;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    margin-bottom: 25px ;
+}
+
+.grid-3 {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    margin-bottom: 25px ;
+}
+
+.grid-column-2 {
+    padding-left: 12px;
+    padding-right: 12px;
+    width: 19%;
+    background-color: var(--white-color);
+    box-shadow: 0 2px 10px #ccc;
+    border-radius: 5px;
+    margin: 20px 4.95px;
+}
+
+.grid-column-2-5 {
+    width: 22%;
+    background-color: var(--white-color);
+    box-shadow: 0 2px 10px #ccc;
+    border-radius: 5px;
+    margin: 20px auto;
+}
+
+.grid-column-8 {
+    padding-left: 12px;
+    padding-right: 12px;
+    width: 80%;
+    margin : auto;
+}
+
+.grid-column-10 {
+    padding-left: 12px;
+    padding-right: 12px;
+    width: 85%;
+    margin : auto;
+}
+
+.grid__full-grid {
+    width : 100%;
+}
+
+.grid-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -12px;
+    margin-right: -12px;
+    margin: auto;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.form {
+    position: fixed;
+    display: flex;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    animation: fadeIn linear 0.1s;
+}
+
+.form-over {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.form-body {
+    margin: auto;
+    position: relative;
+    z-index: 1;
+}
+
+.btn {
+    min-width: 120px;
+    height: 36px;
+    background-color: #dbdbdb;
+    text-decoration: none;
+    border: none;
+    border-radius: 2px;
+    font-size: 1.4rem;
+    padding: 0 8px;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn.btn--s {
+    height: 26px;
+    font-size: 1.2rem;
+    padding: 0 6px;
+}
+
+.btn.btn--primary {
+    color: var(--white-color);
+    background-color: var(--primary-color);
+}
