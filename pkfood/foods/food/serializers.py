@@ -21,7 +21,7 @@ class CategorySerializer(ModelSerializer):
 class StoreSerializer(ModelSerializer):
     class Meta:
         model = StoreDetail
-        fields = ['id', 'name', 'image']
+        fields = ['id', 'name', 'introduction', 'logo', 'address', 'email_contact','phone']
 
 
 class AccountSerializer(ModelSerializer):
@@ -71,5 +71,5 @@ class OrderDetailSerializer(ModelSerializer):
 class AdvertisementSerializer(ModelSerializer):
     class Meta:
         model = Advertisement
-        fields = "__all__"
+        fields = ['id', 'title', 'content', 'image']
 

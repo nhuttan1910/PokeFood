@@ -44,9 +44,13 @@ class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPI
     serializer_class = CategorySerializer
 
 
-class StoreViewSet(viewsets.ViewSet, generics.ListAPIView):
+class StoreViewSet(viewsets.ModelViewSet):
     queryset = StoreDetail.objects.all()
     serializer_class = StoreSerializer
+
+class AdvertisementViewSet(viewsets.ModelViewSet):
+    queryset = Advertisement.objects.all()
+    serializer_class = AdvertisementSerializer
 
 
 class AccountViewSet(viewsets.ViewSet,
