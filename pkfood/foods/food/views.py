@@ -22,7 +22,7 @@ def index(request):
     return HttpResponse("Poke Shop")
 
 
-class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
+class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView, generics.DestroyAPIView):
     queryset = Food.objects.all()
     serializer_class = FoodSerializer
 
@@ -45,7 +45,7 @@ class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPI
     serializer_class = CategorySerializer
 
 
-class StoreViewSet(viewsets.ViewSet, generics.ListAPIView):
+class StoreViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView):
     queryset = StoreDetail.objects.all()
     serializer_class = StoreSerializer
 

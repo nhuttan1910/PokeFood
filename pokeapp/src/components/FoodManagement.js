@@ -11,7 +11,7 @@ const FoodManagement = () => {
 
   const fetchFoods = async () => {
     try {
-      const response = await axios.get(`${api}/food/`);
+      const response = await axios.get(`${api}food/`);
       setFoods(response.data);
     } catch (error) {
       console.error('Error fetching foods:', error);

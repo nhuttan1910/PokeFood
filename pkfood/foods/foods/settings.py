@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'food.apps.FoodConfig',
     'rest_framework',
     'oauth2_provider',
+    'corsheaders', #Dong nay ne
 ]
 
 REST_FRAMEWORK = {
@@ -64,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', #dong nay nua
 ]
 
 ROOT_URLCONF = 'foods.urls'
@@ -157,3 +159,5 @@ CLIENT_ID = 'wQH1wAdg0DCu6Z3nTZYF4vIJTOQpHWVvUO6X5qAK'
 
 CLIENT_SECRET = 'Hxc5hmxcODDfMbLYbpfhrD2i6vWui85QpCvOcYDJ9BL1yn6YSkcSWz2ZIIXY92iEnJTfmvbHgUHPU5gYI7zou6XvAqintfZGwiUlAFuzRQzydnecpzCXDM21ykKjwIju'
 # CLIENT_SECRET = 'hxRuyEC9TeeBqEmc3YPAgphW7hMQVdRLNhZ6dhuZHXiKEyeHNlLCimz9t33XfJmT4HEXa2JH2bCO8ONthb9QnlUlBknstfmgHgUi1ZeZXZIVK9kiAaJY9KBRTRb6n4yj'
+
+CORS_ALLOW_ALL_ORIGINS = True
