@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'food.apps.FoodConfig',
     'rest_framework',
     'oauth2_provider',
-    'corsheaders', #Dong nay ne
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
@@ -65,8 +65,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware', #dong nay nua
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'foods.urls'
 
@@ -97,7 +98,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pokeshop',
         'USER': 'root',
-        'PASSWORD': 'admin123', #'Admin@123'
+        'PASSWORD': 'Admin@123',
         'HOST': ''
     }
 }
@@ -154,10 +155,8 @@ cloudinary.config(
 
 AUTH_USER_MODEL = 'food.Account'
 
-CLIENT_ID = 'wQH1wAdg0DCu6Z3nTZYF4vIJTOQpHWVvUO6X5qAK'
-# CLIENT_ID = 'lX9UvQVCYHVe8uIr18jfrvoeNx7Kp2okFNOH8N7O'
+#CLIENT_ID = 'wQH1wAdg0DCu6Z3nTZYF4vIJTOQpHWVvUO6X5qAK'
+CLIENT_ID = 'JVueeMClIZzEAiLQB0efRHvFQuN9x2nfZe2CFfJ0'
 
-CLIENT_SECRET = 'Hxc5hmxcODDfMbLYbpfhrD2i6vWui85QpCvOcYDJ9BL1yn6YSkcSWz2ZIIXY92iEnJTfmvbHgUHPU5gYI7zou6XvAqintfZGwiUlAFuzRQzydnecpzCXDM21ykKjwIju'
-# CLIENT_SECRET = 'hxRuyEC9TeeBqEmc3YPAgphW7hMQVdRLNhZ6dhuZHXiKEyeHNlLCimz9t33XfJmT4HEXa2JH2bCO8ONthb9QnlUlBknstfmgHgUi1ZeZXZIVK9kiAaJY9KBRTRb6n4yj'
-
-CORS_ALLOW_ALL_ORIGINS = True
+#CLIENT_SECRET = 'Hxc5hmxcODDfMbLYbpfhrD2i6vWui85QpCvOcYDJ9BL1yn6YSkcSWz2ZIIXY92iEnJTfmvbHgUHPU5gYI7zou6XvAqintfZGwiUlAFuzRQzydnecpzCXDM21ykKjwIju'
+CLIENT_SECRET = 'vKfJNyVrvfTYvzhjtx5yioGVG3g0csXzXBRdwW5dKLv2QvlXBHEbqRJylQsyyEak0L1x0S1hyN3bxc8n3XIxh8Ua0HtCT95WsDLRxgVwOAZtmKJtNDgWrr6ABsgy15r9'

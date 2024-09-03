@@ -6,25 +6,19 @@ import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faInstagram, faDiscord } from '@fortawesome/free-brands-svg-icons';
-import axios from 'axios';
-const api = 'http://127.0.0.1:8000'
-
 
 const Footer = () => {
-    const [logo, setLogo] = useState('');
-
+  const [logoInfo, setLogoInfo] = useState('');
 
   useEffect(() => {
     const fetchLogo = async () => {
       try {
-        // const res = await fetch('http://127.0.0.1:8000/store/');
-        // const data = await res.json();
-        const response = await axios.get(`${api}store/`)
-        const data = response.data
-        const cloudinaryBaseURL = 'https://res.cloudinary.com/di0aqgf2u/';
-          
-        //   setLogo(cloudinaryBaseURL + data[0].logo);
-        setLogo(`${cloudinaryBaseURL}/image/upload/v1725291480/ezrucn5lhrl34ndrenhu.jpg`);
+        const res = await fetch('http://127.0.0.1:8000/store/');
+        const data = await res.json();
+        if (data && data.length > 0) {
+          const cloudinaryBaseURL = 'https://res.cloudinary.com/di0aqgf2u/';
+          setLogoInfo(cloudinaryBaseURL + data[0].logo);
+        }
       } catch (error) {
         console.error('Failed to fetch logo URL:', error);
       }
@@ -32,14 +26,12 @@ const Footer = () => {
 
     fetchLogo();
   }, []);
-
-
   return (
     <footer class="footer">
             <div class="footer-container">
                 <div class="footer-container-40">
                     <div className="footer-container-40-header">
-                        <img src={logo} alt="" className="footer-container-icon" />
+                        <img src={logoInfo} alt="" className="footer-container-icon" />
                     </div>
                     <h1 class="footer-container-text">Đăng Ký Nhận Thông Tin Khuyến Mãi</h1>
                     <div class="footer-container-content">
@@ -112,6 +104,6 @@ const Footer = () => {
             </div>
         </footer>
     );
-};
+  };
 
 export default Footer;

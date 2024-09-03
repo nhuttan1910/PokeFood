@@ -6,8 +6,7 @@ from rest_framework.exceptions import ValidationError
 from .models import *
 from .serializers import *
 from rest_framework.parsers import MultiPartParser
-from .paginator import *
-# from food import serializers, paginator
+from food import serializers, paginator
 import hmac, uuid, hashlib, requests, json,logging
 from django.conf import settings
 from django.http import JsonResponse
@@ -22,7 +21,7 @@ def index(request):
     return HttpResponse("Poke Shop")
 
 
-class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView, generics.DestroyAPIView):
+class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
     queryset = Food.objects.all()
     serializer_class = FoodSerializer
 
@@ -40,24 +39,18 @@ class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView
         else:
             return Response({"error": "No search term provided."}, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(methods=['get'],url_path='category', detail=False)
-    def get_food_by_category(self, request):
-        category = request.query_params.get('category', None)
-        if category is not None:
-            food = Food.objects.filter(category=category)
-            return Response(FoodSerializer(food, many=True).data, status=status.HTTP_200_OK)
-        else:
-            return Response({"error": "Category parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
-
-
 class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 
-class StoreViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView):
+class StoreViewSet(viewsets.ModelViewSet):
     queryset = StoreDetail.objects.all()
     serializer_class = StoreSerializer
+
+class AdvertisementViewSet(viewsets.ModelViewSet):
+    queryset = Advertisement.objects.all()
+    serializer_class = AdvertisementSerializer
 
 
 class AccountViewSet(viewsets.ViewSet,
@@ -86,13 +79,8 @@ class AccountViewSet(viewsets.ViewSet,
 
     @action(methods=['post'], detail=False, url_path='create-account')
     def create_account(self, request):
-        fn = request.data.get('first_name')
-        if fn is None:
-            fn= 'new'
-
-        ln = request.data.get('last_name')
-        if ln is None:
-            ln = 'account'
+        fn = request.data.get('firstname', 'new')
+        ln = request.data.get('lastname', 'account')
         un = request.data.get('username')
         pw = request.data.get('password')
         e = request.data.get('email')
@@ -322,6 +310,3 @@ class PayViewSet(viewsets.ViewSet):
 
 
 
-class CartDetailViewSet(viewsets.ViewSet, generics.ListAPIView,):
-    queryset = CartDetail.objects.all()
-    serializer_class = CartDetailSerializer

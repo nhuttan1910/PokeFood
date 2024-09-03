@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd628f97-2a33-4917-9633-da1ea7f6c5b7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../pkfood/foods/food/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/../pkfood/foods/food/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pkfood/foods/food/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../pkfood/foods/food/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Menu.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/Footer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/Footer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/auto.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/auto.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/home.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/home.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/Advertisement.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/Advertisement.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +34,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "NhutTan",
     "last_opened_file_path": "C:/PokeFood/pokeapp"
   }
 }]]></component>
