@@ -316,6 +316,3 @@ class PayViewSet(viewsets.ViewSet):
             # Thanh toán thất bại
             return Response({"error": data.get('message')}, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-
