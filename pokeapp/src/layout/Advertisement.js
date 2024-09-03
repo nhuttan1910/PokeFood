@@ -1,112 +1,76 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../assets/main.css';
 import '../assets/base.css';
 import '../assets/home.css';
 
 const Advertisement = () => {
-  const [slides, setSlides] = useState([]);
   const [slideIndex, setSlideIndex] = useState(1);
-  const slideRefs = useRef([]);
-
-  useEffect(() => {
-    const fetchSlides = async () => {
-      try {
-        const response = await fetch('http://127.0.0.1:8000/advertisement/');
-        const data = await response.json();
-        if (data && data.length > 0) {
-          const cloudinaryBaseURL = 'https://res.cloudinary.com/di0aqgf2u/';
-          setSlides(data.map(slide => ({
-            id: slide.id,
-            image: cloudinaryBaseURL + slide.image,
-          })));
-        }
-      } catch (error) {
-        console.error('Error fetching slides:', error);
-      }
-    };
-
-    fetchSlides();
-  }, []);
 
   const showSlides = (n) => {
-    const dots = document.getElementsByClassName("dot");
-    const slidesArray = slideRefs.current;
+    const slides = document.getElementsByClassName('advert');
+    const dots = document.getElementsByClassName('dot');
 
-    if (n > slidesArray.length) setSlideIndex(1);
-    if (n < 1) setSlideIndex(slidesArray.length);
+    if (n > slides.length) {
+      setSlideIndex(1);
+    } else if (n < 1) {
+      setSlideIndex(slides.length);
+    } else {
+      setSlideIndex(n);
+    }
 
-    slidesArray.forEach((slide, index) => {
-      if (slide) {
-        slide.style.display = "none";
-      }
-    });
-
+    for (let i = 0; i < slides.length; i++) {
+      slides[i].style.display = 'none';
+    }
     for (let i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
+      dots[i].className = dots[i].className.replace(' active', '');
     }
 
-    if (slidesArray[slideIndex - 1]) {
-      slidesArray[slideIndex - 1].style.display = "block";
-    }
-    if (dots[slideIndex - 1]) {
-      dots[slideIndex - 1].className += " active";
-    }
+    slides[slideIndex - 1].style.display = 'block';
+    dots[slideIndex - 1].className += ' active';
   };
 
   useEffect(() => {
     showSlides(slideIndex);
-
-    const intervalId = setInterval(() => {
+    const interval = setInterval(() => {
       setSlideIndex(prevIndex => {
-        const newIndex = prevIndex + 1 > slides.length ? 1 : prevIndex + 1;
-        showSlides(newIndex);
-        return newIndex;
+        const newIndex = prevIndex + 1;
+        return newIndex > 3 ? 1 : newIndex;
       });
     }, 5000);
 
-    return () => clearInterval(intervalId);
-  }, [slideIndex, slides]);
+    return () => clearInterval(interval);
+  }, [slideIndex]);
 
-  const handlePrev = () => {
+  const plusSlides = (n) => {
     setSlideIndex(prevIndex => {
-      const newIndex = prevIndex - 1 < 1 ? slides.length : prevIndex - 1;
-      showSlides(newIndex);
-      return newIndex;
+      const newIndex = prevIndex + n;
+      return newIndex > 3 ? 1 : newIndex < 1 ? 3 : newIndex;
     });
   };
 
-  const handleNext = () => {
-    setSlideIndex(prevIndex => {
-      const newIndex = prevIndex + 1 > slides.length ? 1 : prevIndex + 1;
-      showSlides(newIndex);
-      return newIndex;
-    });
+  const currentSlide = (n) => {
+    setSlideIndex(n);
   };
 
   return (
-    <div>
-      <div className="advert-container">
-        {slides.map((slide, index) => (
-          <div
-            className="advert fade"
-            id={`slide-${index}`}
-            key={slide.id}
-            ref={el => slideRefs.current[index] = el}
-          >
-            <img src={slide.image} style={{ width: '100%' }} alt={`Slide ${index + 1}`} />
-          </div>
-        ))}
-        <a className="prev" onClick={handlePrev}>&#10094;</a>
-        <a className="next" onClick={handleNext}>&#10095;</a>
+    <div className="advert-container">
+      <div className={`advert fade ${slideIndex === 1 ? 'show' : ''}`}>
+        <img src="https://res.cloudinary.com/di0aqgf2u/image/upload/v1725297197/ywbhzhvx31xa1jse4rmj.jpg" style={{ width: '100%' }} alt="Slide 1" />
       </div>
+      <div className={`advert fade ${slideIndex === 2 ? 'show' : ''}`}>
+        <img src="https://res.cloudinary.com/di0aqgf2u/image/upload/v1725297654/tm42je6d4g3kgtmk1ybf.jpg" style={{ width: '100%' }} alt="Slide 2" />
+      </div>
+      <div className={`advert fade ${slideIndex === 3 ? 'show' : ''}`}>
+        <img src="https://res.cloudinary.com/di0aqgf2u/image/upload/v1725297668/wljkfvdyn53o6s3sysai.jpg" style={{ width: '100%' }} alt="Slide 3" />
+      </div>
+
+      <a className="prev" onClick={() => plusSlides(-1)}>❮</a>
+      <a className="next" onClick={() => plusSlides(1)}>❯</a>
+
       <div style={{ textAlign: 'center' }}>
-        {slides.map((_, index) => (
-          <span
-            className="dot"
-            key={index}
-            onClick={() => setSlideIndex(index + 1)}
-          ></span>
-        ))}
+        <span className={`dot ${slideIndex === 1 ? 'active' : ''}`} onClick={() => currentSlide(1)}></span>
+        <span className={`dot ${slideIndex === 2 ? 'active' : ''}`} onClick={() => currentSlide(2)}></span>
+        <span className={`dot ${slideIndex === 3 ? 'active' : ''}`} onClick={() => currentSlide(3)}></span>
       </div>
     </div>
   );

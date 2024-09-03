@@ -78,66 +78,25 @@
 //window.initializeSlider = initializeSlider;
 
 
-window.initializeSlider = function () {
-  let slideIndex = 1;
-  showSlides(slideIndex);
+export function autoSlider(slideInterval, setSlideInterval, slideIndex, setSlideIndex, totalSlides) {
+  clearInterval(slideInterval);
+  setSlideInterval(setInterval(() => {
+    setSlideIndex((prevIndex) => (prevIndex + 1) > totalSlides ? 1 : prevIndex + 1);
+  }, 5000));
+}
 
-  let slideInterval = setInterval(function () {
-    plusSlides(1);
-  }, 5000); // 5000 ms = 5 giây
-
-  function plusSlides(n) {
-    showSlides((slideIndex += n));
-  }
-
-  function currentSlide(n) {
-    showSlides((slideIndex = n));
-  }
-
-  function showSlides(n) {
-    let i;
-    let slides = document.getElementsByClassName("advert");
-    let dots = document.getElementsByClassName("dot");
-
-    if (n > slides.length) {
-      slideIndex = 1;
-    }
-    if (n < 1) {
-      slideIndex = slides.length;
-    }
-
-    for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-    }
-    for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-    }
-
-    slides[slideIndex - 1].style.display = "block";
-    dots[slideIndex - 1].className += " active";
-  }
-
-  document.querySelector(".prev").addEventListener("click", function () {
-    plusSlides(-1);
+export function showSlides(slideIndex, slides, dots) {
+  slides.forEach((slide, index) => {
+    slide.style.display = index + 1 === slideIndex ? 'block' : 'none';
   });
 
-  document.querySelector(".next").addEventListener("click", function () {
-    plusSlides(1);
+  dots.forEach((dot, index) => {
+    dot.className = dot.className.replace(' active', '');
+    if (index + 1 === slideIndex) {
+      dot.className += ' active';
+    }
   });
-
-  document.querySelectorAll(".dot").forEach((dot, index) => {
-    dot.addEventListener("click", function () {
-      currentSlide(index + 1);
-    });
-  });
-
-  function resetInterval() {
-    clearInterval(slideInterval); // Dừng interval hiện tại
-    slideInterval = setInterval(function () {
-      plusSlides(1);
-    }, 5000);
-  }
-};
+}
 
 
 
