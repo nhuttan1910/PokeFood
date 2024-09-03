@@ -6,19 +6,25 @@ import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faInstagram, faDiscord } from '@fortawesome/free-brands-svg-icons';
+import axios from 'axios';
+const api = 'http://127.0.0.1:8000'
+
 
 const Footer = () => {
-  const [logo, setLogo] = useState('');
+    const [logo, setLogo] = useState('');
+
 
   useEffect(() => {
     const fetchLogo = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:8000/store');
-        const data = await res.json();
-        if (data && data.length > 0) {
-          const cloudinaryBaseURL = 'https://res.cloudinary.com/di0aqgf2u/';
-          setLogo(cloudinaryBaseURL + data[0].logo);
-        }
+        // const res = await fetch('http://127.0.0.1:8000/store/');
+        // const data = await res.json();
+        const response = await axios.get(`${api}store/`)
+        const data = response.data
+        const cloudinaryBaseURL = 'https://res.cloudinary.com/di0aqgf2u/';
+          
+        //   setLogo(cloudinaryBaseURL + data[0].logo);
+        setLogo(`${cloudinaryBaseURL}/image/upload/v1725291480/ezrucn5lhrl34ndrenhu.jpg`);
       } catch (error) {
         console.error('Failed to fetch logo URL:', error);
       }
@@ -26,6 +32,8 @@ const Footer = () => {
 
     fetchLogo();
   }, []);
+
+
   return (
     <footer class="footer">
             <div class="footer-container">
@@ -104,6 +112,6 @@ const Footer = () => {
             </div>
         </footer>
     );
-  };
+};
 
 export default Footer;

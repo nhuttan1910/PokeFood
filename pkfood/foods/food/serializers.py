@@ -21,7 +21,7 @@ class CategorySerializer(ModelSerializer):
 class StoreSerializer(ModelSerializer):
     class Meta:
         model = StoreDetail
-        fields = ['id', 'name', 'image']
+        fields = ['id', 'name', 'logo']
 
 
 class AccountSerializer(ModelSerializer):
