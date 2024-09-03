@@ -40,6 +40,16 @@ class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView
         else:
             return Response({"error": "No search term provided."}, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(methods=['get'],url_path='category', detail=False)
+    def get_food_by_category(self, request):
+        category = request.query_params.get('category', None)
+        if category is not None:
+            food = Food.objects.filter(category=category)
+            return Response(FoodSerializer(food, many=True).data, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Category parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
