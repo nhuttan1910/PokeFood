@@ -1,16 +1,12 @@
-import { React, useEffect, useState } from 'react';
-import '../assets/main.css';
-import '../assets/base.css';
-import '../assets/home.css';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faCartShopping, faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
-
-const Header = () => {
-    const [logoInfo, setLogoInfo] = useState('');
+const Header = ({ isLoggedIn, onLogout }) => {
+  const [logoInfo, setLogoInfo] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLogo = async () => {
@@ -28,6 +24,7 @@ const Header = () => {
 
     fetchLogo();
   }, []);
+
   return (
     <header className="header">
       <div className="grid">
@@ -50,37 +47,55 @@ const Header = () => {
             </li>
           </ul>
           <ul className="nav-list">
-            <li className="nav-item">
-              <Link className="nav-item-link" to="/register">
-                Register
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-item-link" to="/login">
-                Login
-              </Link>
-            </li>
+            {isLoggedIn ? (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-item-link" to="/account">
+                    <FontAwesomeIcon icon={faUser} className="nav-item-icon" />
+                    Account
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-item-link" onClick={onLogout}>
+                    <FontAwesomeIcon icon={faSignOutAlt} className="nav-item-icon" />
+                    Logout
+                  </Link>
+</li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-item-link" to="/register">
+                    Register
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-item-link" to="/login">
+                    Login
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
-        <div class="header-with-search">
-                    <div class="header-logo">
-                        <img src={logoInfo}  class="header-logo-img" />
-                    </div>
-                    <div class="header-search">
-                        <div class="header-search-wrap">
-                            <input type="text" class="header-search-input" placeholder="Nhập để tìm kiếm" />
-                        </div>
-                        <button class="header-search-btn">
-                            <FontAwesomeIcon icon={faMagnifyingGlass} className="header-search-icon" />
-                        </button>
-                    </div>
-                    <div class="header-cart">
-                        <div class="header-cart-wrap">
-                            <FontAwesomeIcon icon={faCartShopping} className="header-cart-icon" />
-                        </div>
-                    </div>
-
-                </div>
+        <div className="header-with-search">
+          <div className="header-logo">
+            <img src={logoInfo} className="header-logo-img" alt="Logo" />
+          </div>
+          <div className="header-search">
+            <div className="header-search-wrap">
+              <input type="text" className="header-search-input" placeholder="Nhập để tìm kiếm" />
+            </div>
+            <button className="header-search-btn">
+              <FontAwesomeIcon icon={faMagnifyingGlass} className="header-search-icon" />
+            </button>
+          </div>
+          <div className="header-cart">
+            <div className="header-cart-wrap">
+              <FontAwesomeIcon icon={faCartShopping} className="header-cart-icon" />
+            </div>
+          </div>
+        </div>
       </div>
     </header>
   );

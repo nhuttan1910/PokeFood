@@ -7,8 +7,12 @@ const FoodList = ({ categoryId }) => {
   const [foods, setFoods] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    setIsLoggedIn(!!token);
+
     if (!categoryId) {
       setFoods([]);
       setLoading(false);
@@ -23,10 +27,12 @@ const FoodList = ({ categoryId }) => {
         }
         const data = await response.json();
         const cloudinaryBaseURL = 'https://res.cloudinary.com/di0aqgf2u/';
-        setFoods(data.map(food => ({
-          ...food,
-          image: cloudinaryBaseURL + food.image
-        })));
+        setFoods(
+          data.map(food => ({
+            ...food,
+            image: cloudinaryBaseURL + food.image
+          }))
+        );
       } catch (error) {
         setError(error.message);
       } finally {
@@ -36,6 +42,15 @@ const FoodList = ({ categoryId }) => {
 
     fetchFoods();
   }, [categoryId]);
+
+  const handleAddToCart = (foodId) => {
+    if (!isLoggedIn) {
+      alert("Bạn cần đăng nhập để thêm vào giỏ hàng!");
+      return;
+    }
+    // Thêm logic thêm vào giỏ hàng ở đây
+    console.log("Thêm vào giỏ hàng: ", foodId);
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -59,7 +74,7 @@ const FoodList = ({ categoryId }) => {
                     <div className="product-item-price">
                       <span className="product-item-price-now">{food.price.toLocaleString()} VNĐ</span>
                     </div>
-                    <button className="product-item-btn">Thêm vào giỏ hàng</button>
+                    <button className="product-item-btn" onClick={() => handleAddToCart(food.id)}>Thêm vào giỏ hàng</button>
                   </div>
                 </div>
               ))}
