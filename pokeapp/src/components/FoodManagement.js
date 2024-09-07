@@ -11,9 +11,11 @@ const FoodManagement = () => {
 
   const fetchFoods = async () => {
     try {
+      const response = await axios.get(`${api}/food/`);
+      console.log(response.data); // Kiểm tra dữ liệu trả về
       setFoods(response.data);
     } catch (error) {
-      console.error('Error fetching foods:', error);
+      console.error('There was an error fetching the foods!', error);
     }
   };
 
