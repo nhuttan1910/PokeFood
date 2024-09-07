@@ -18,6 +18,7 @@ const Construction = () => {
           throw new Error("Failed to fetch store information");
         }
         const data = await response.json();
+        console.log(data);
 
 
         if (Array.isArray(data) && data.length > 0) {
@@ -35,7 +36,6 @@ const Construction = () => {
     fetchStoreInfo();
   }, []);
 
-  // Hiển thị loading hoặc lỗi nếu có
   if (loading) {
     return <p>Đang tải dữ liệu...</p>;
   }
