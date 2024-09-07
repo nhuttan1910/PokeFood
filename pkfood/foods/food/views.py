@@ -232,6 +232,15 @@ class OrderDetailViewSet(viewsets.ViewSet, generics.ListAPIView,
         queryset = OrderDetail.objects.all()
         serializer_class = OrderDetailSerializer
 
+        @action(methods=['get'], url_path='order', detail=False)
+        def get_order_detail(self, request):
+            order = request.query_params.get('order', None)
+            if order is not None:
+                order_detail = OrderDetail.objects.filter(order=order)
+                return Response(OrderDetailSerializer(order, many=True).data, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "Category parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class PayViewSet(viewsets.ViewSet):
 
