@@ -220,7 +220,7 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView,
     def confirm(self, request):
         order_id = request.data.get('order_id')
         order = Order.objects.get(id=order_id)
-        order.is_confirmed = True
+        order.confirmed = True
         order.save()
         return Response(OrderSerializer(order).data, status=status.HTTP_200_OK)
 
