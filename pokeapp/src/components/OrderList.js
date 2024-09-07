@@ -9,7 +9,6 @@ const OrderList = () => {
     const [selectedOrder, setSelectedOrder] = useState(null);
 
     useEffect(() => {
-        // Lấy danh sách các đơn hàng từ API
         axios.get(`${api}order/`)
             .then(response => {
                 setOrders(response.data);
@@ -23,17 +22,17 @@ const OrderList = () => {
         setSelectedOrder(order);
     };
 
-    const handleConfirmClick = (orderId) => {
-        axios.post(`${api}is_confirm/?order_id=${orderId}/`)
-            .then(response => {
-                // Nếu cần, bạn có thể cập nhật lại danh sách đơn hàng hoặc chỉ cập nhật trạng thái đơn hàng đã xác nhận
-                setOrders(prevOrders => prevOrders.map(order =>
-                    order.id === orderId ? { ...order, is_confirmed: true } : order
-                ));
-            })
-            .catch(error => {
-                console.error('There was an error confirming the order!', error);
-            });
+    const handleConfirmClick = async (orderId) => {
+        try {
+            await axios.patch(`${api}order/is_confirm/`, { order_id: orderId });
+            alert(`Order #${orderId} has been confirmed.`);
+            // Cập nhật trạng thái confirmed cho order trong danh sách
+            setOrders(prevOrders => prevOrders.map(order =>
+                order.id === orderId ? { ...order, confirmed: true } : order
+            ));
+        } catch (error) {
+            console.error('There was an error confirming the order!', error);
+        }
     };
 
     return (
@@ -42,11 +41,12 @@ const OrderList = () => {
             <ul>
                 {orders.map(order => (
                     <li key={order.id}>
-                        Order #{order.id} - {order.address} - {order.account} - {order.confirmed}
-                        {!order.is_confirmed && (
+                        Order #{order.id} - {order.address} - {order.account} - 
+                        <strong>{order.confirmed ? 'Confirmed' : 'Not Confirmed'}</strong>
+                        <button onClick={() => handleOrderClick(order)}>Show Details</button>
+                        {!order.confirmed && (
                             <button onClick={() => handleConfirmClick(order.id)}>Confirm</button>
                         )}
-                        <button onClick={() => handleOrderClick(order)}>Show</button>
                     </li>
                 ))}
             </ul>
