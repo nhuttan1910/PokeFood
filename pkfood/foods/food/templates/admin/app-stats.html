@@ -32,46 +32,102 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const revenueData = {
-        labels: [{% for data in revenue_by_month %}'{{ data.month|date:"Y-m" }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+    // Dữ liệu cho biểu đồ doanh thu
+    const revenueLabels = []
+    const revenueData = []
+    const revenueColors = []
+    const revenueBorderColors = []
+
+    {% for data in revenue_by_month %}
+        {% if data.revenue %}
+            revenueLabels.push('{{ data.month|date:"Y-m" }}');
+            revenueData.push({{ data.revenue }});
+
+            let r = Math.random() * 255;
+            let g = Math.random() * 255;
+            let b = Math.random() * 255;
+
+            revenueColors.push(`rgba(${r},${g},${b}, 0.3)`);
+            revenueBorderColors.push(`rgba(${r},${g},${b}, 1)`);
+        {% endif %}
+    {% endfor %}
+
+    const revenueChartData = {
+        labels: revenueLabels,
         datasets: [{
             label: 'Doanh thu',
-            data: [{% for data in revenue_by_month %}{{ data.revenue }}{% if not forloop.last %},{% endif %}{% endfor %}],
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            data: revenueData,
+            backgroundColor: revenueColors,
+            borderColor: revenueBorderColors,
             borderWidth: 1
         }]
     };
 
-    // Data preparation for food order chart
-    const foodOrderData = {
-        labels: [{% for data in food_order_count_by_month %}'{{ data.food__name }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+    // Dữ liệu cho biểu đồ số lần đặt món ăn
+    const foodOrderLabels = [];
+    const foodOrderData = [];
+    const foodOrderColors = [];
+    const foodOrderBorderColors = [];
+    {% for data in food_order_count_by_month %}
+        {% if data.order_count %}
+            foodOrderLabels.push('{{ data.food__name }}');
+            foodOrderData.push({{ data.order_count }});
+
+            let r = Math.random() * 255;
+            let g = Math.random() * 255;
+            let b = Math.random() * 255;
+
+            foodOrderColors.push(`rgba(${r},${g},${b}, 0.3)`);
+            foodOrderBorderColors.push(`rgba(${r},${g},${b}, 1)`);
+        {% endif %}
+    {% endfor %}
+
+    const foodOrderChartData = {
+        labels: foodOrderLabels,
         datasets: [{
             label: 'Số lần đặt món',
-            data: [{% for data in food_order_count_by_month %}{{ data.order_count }}{% if not forloop.last %},{% endif %}{% endfor %}],
-            backgroundColor: 'rgba(153, 102, 255, 0.2)',
-            borderColor: 'rgba(153, 102, 255, 1)',
+            data: foodOrderData,
+            backgroundColor: foodOrderColors,
+            borderColor: foodOrderBorderColors,
             borderWidth: 1
         }]
     };
 
-    // Data preparation for order count chart
-    const orderCountData = {
-        labels: [{% for data in order_count_by_month %}'{{ data.month|date:"Y-m" }}'{% if not forloop.last %},{% endif %}{% endfor %}],
+    // Dữ liệu cho biểu đồ số lượng đơn hàng
+    const orderCountLabels = [];
+    const orderCountData = [];
+    const orderCountColors = [];
+    const orderCountBorderColors = [];
+    {% for data in order_count_by_month %}
+        {% if data.order_count %}
+            orderCountLabels.push('{{ data.month|date:"Y-m" }}');
+            orderCountData.push({{ data.order_count }});
+
+            let r = Math.random() * 255;
+            let g = Math.random() * 255;
+            let b = Math.random() * 255;
+
+            orderCountColors.push(`rgba(${r},${g},${b}, 0.3)`);
+            orderCountBorderColors.push(`rgba(${r},${g},${b}, 1)`);
+        {% endif %}
+    {% endfor %}
+
+    const orderCountChartData = {
+        labels: orderCountLabels,
         datasets: [{
             label: 'Số lượng đơn hàng',
-            data: [{% for data in order_count_by_month %}{{ data.order_count }}{% if not forloop.last %},{% endif %}{% endfor %}],
-            backgroundColor: 'rgba(255, 206, 86, 0.2)',
-            borderColor: 'rgba(255, 206, 86, 1)',
+            data: orderCountData,
+            backgroundColor: orderCountColors,
+            borderColor: orderCountBorderColors,
             borderWidth: 1
         }]
     };
 
-    // Render revenue chart
+    // Vẽ biểu đồ doanh thu
     const ctx1 = document.getElementById('revenueChart').getContext('2d');
     new Chart(ctx1, {
         type: 'bar',
-        data: revenueData,
+        data: revenueChartData,
         options: {
             scales: {
                 y: {
@@ -81,11 +137,11 @@
         }
     });
 
-    // Render food order chart
+    // Vẽ biểu đồ số lần đặt món ăn
     const ctx2 = document.getElementById('foodOrderChart').getContext('2d');
     new Chart(ctx2, {
         type: 'bar',
-        data: foodOrderData,
+        data: foodOrderChartData,
         options: {
             scales: {
                 y: {
@@ -95,11 +151,11 @@
         }
     });
 
-    // Render order count chart
+    // Vẽ biểu đồ số lượng đơn hàng
     const ctx3 = document.getElementById('orderCountChart').getContext('2d');
     new Chart(ctx3, {
         type: 'bar',
-        data: orderCountData,
+        data: orderCountChartData,
         options: {
             scales: {
                 y: {
