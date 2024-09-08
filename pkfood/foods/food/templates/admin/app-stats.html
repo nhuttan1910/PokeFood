@@ -1,131 +1,119 @@
 {% extends 'admin/base_site.html' %}
 
 {% block content %}
-<div class="container">
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#revenue">Thống kê theo doanh thu</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#food-orders">Thống kê số lần đặt món ăn</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#order-count">Thống kê theo số lượng đơn hàng</a>
-        </li>
-    </ul>
+<h1>Statistics for Orders in {{ year }}</h1>
 
-    <div class="tab-content">
-        <!-- Thống kê theo doanh thu -->
-        <div class="tab-pane container active" id="revenue">
-            <canvas id="revenueChart"></canvas>
-        </div>
-        <!-- Thống kê số lần đặt món ăn -->
-        <div class="tab-pane container fade" id="food-orders">
-            <canvas id="foodOrderChart"></canvas>
-        </div>
-        <!-- Thống kê theo số lượng đơn hàng -->
-        <div class="tab-pane container fade" id="order-count">
-            <canvas id="orderCountChart"></canvas>
-        </div>
-    </div>
+<!-- Biểu đồ số lượng đơn hàng -->
+<div>
+    <h2>Number of Orders by Month</h2>
+    <canvas id="orderCountChart" width="400" height="200"></canvas>
+</div>
+
+<!-- Biểu đồ doanh thu -->
+<div>
+    <h2>Revenue by Month</h2>
+    <canvas id="revenueChart" width="400" height="200"></canvas>
+</div>
+
+<!-- Biểu đồ số lần đặt món ăn -->
+<div>
+    <h2>Food Orders by Month</h2>
+    <canvas id="foodOrderChart" width="400" height="200"></canvas>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Dữ liệu cho biểu đồ doanh thu
-    const revenueLabels = []
-    const revenueData = []
-    const revenueColors = []
-    const revenueBorderColors = []
+    // Chuyển đổi chuỗi JSON thành đối tượng JavaScript
+    const orderCountLabels = JSON.parse('{{ order_count_labels|safe }}');
+    const orderCountData = JSON.parse('{{ order_count_data|safe }}');
+    const revenueLabels = JSON.parse('{{ revenue_labels|safe }}');
+    const revenueData = JSON.parse('{{ revenue_data|safe }}');
+    const foodOrderLabels = JSON.parse('{{ food_order_labels|safe }}');
+    const foodOrderData = JSON.parse('{{ food_order_data|safe }}');
 
-    {% for data in revenue_by_month %}
-        {% if data.revenue %}
-            revenueLabels.push('{{ data.month|date:"Y-m" }}');
-            revenueData.push({{ data.revenue }});
-
-            let r = Math.random() * 255;
-            let g = Math.random() * 255;
-            let b = Math.random() * 255;
-
-            revenueColors.push(`rgba(${r},${g},${b}, 0.3)`);
-            revenueBorderColors.push(`rgba(${r},${g},${b}, 1)`);
-        {% endif %}
-    {% endfor %}
-
-    const revenueChartData = {
-        labels: revenueLabels,
-        datasets: [{
-            label: 'Doanh thu',
-            data: revenueData,
-            backgroundColor: revenueColors,
-            borderColor: revenueBorderColors,
-            borderWidth: 1
-        }]
-    };
-
-    // Dữ liệu cho biểu đồ số lần đặt món ăn
-    const foodOrderLabels = [];
-    const foodOrderData = [];
-    const foodOrderColors = [];
-    const foodOrderBorderColors = [];
-    {% for data in food_order_count_by_month %}
-        {% if data.order_count %}
-            foodOrderLabels.push('{{ data.food__name }}');
-            foodOrderData.push({{ data.order_count }});
-
-            let r = Math.random() * 255;
-            let g = Math.random() * 255;
-            let b = Math.random() * 255;
-
-            foodOrderColors.push(`rgba(${r},${g},${b}, 0.3)`);
-            foodOrderBorderColors.push(`rgba(${r},${g},${b}, 1)`);
-        {% endif %}
-    {% endfor %}
-
-    const foodOrderChartData = {
-        labels: foodOrderLabels,
-        datasets: [{
-            label: 'Số lần đặt món',
-            data: foodOrderData,
-            backgroundColor: foodOrderColors,
-            borderColor: foodOrderBorderColors,
-            borderWidth: 1
-        }]
-    };
-
-    // Dữ liệu cho biểu đồ số lượng đơn hàng
-    const orderCountLabels = [];
-    const orderCountData = [];
-    const orderCountColors = [];
-    const orderCountBorderColors = [];
-    {% for data in order_count_by_month %}
-        {% if data.order_count %}
-            orderCountLabels.push('{{ data.month|date:"Y-m" }}');
-            orderCountData.push({{ data.order_count }});
-
-            let r = Math.random() * 255;
-            let g = Math.random() * 255;
-            let b = Math.random() * 255;
-
-            orderCountColors.push(`rgba(${r},${g},${b}, 0.3)`);
-            orderCountBorderColors.push(`rgba(${r},${g},${b}, 1)`);
-        {% endif %}
-    {% endfor %}
-
+    // Dữ liệu và cấu hình biểu đồ số lượng đơn hàng
     const orderCountChartData = {
         labels: orderCountLabels,
         datasets: [{
-            label: 'Số lượng đơn hàng',
+            label: 'Number of Orders',
             data: orderCountData,
-            backgroundColor: orderCountColors,
-            borderColor: orderCountBorderColors,
+            backgroundColor: orderCountLabels.map(() => {
+                let r = Math.random() * 255;
+                let g = Math.random() * 255;
+                let b = Math.random() * 255;
+                return `rgba(${r},${g},${b}, 0.3)`;
+            }),
+            borderColor: orderCountLabels.map(() => {
+                let r = Math.random() * 255;
+                let g = Math.random() * 255;
+                let b = Math.random() * 255;
+                return `rgba(${r},${g},${b}, 1)`;
+            }),
             borderWidth: 1
         }]
     };
 
-    // Vẽ biểu đồ doanh thu
-    const ctx1 = document.getElementById('revenueChart').getContext('2d');
+    // Dữ liệu và cấu hình biểu đồ doanh thu
+    const revenueChartData = {
+        labels: revenueLabels,
+        datasets: [{
+            label: 'Revenue',
+            data: revenueData,
+            backgroundColor: revenueLabels.map(() => {
+                let r = Math.random() * 255;
+                let g = Math.random() * 255;
+                let b = Math.random() * 255;
+                return `rgba(${r},${g},${b}, 0.3)`;
+            }),
+            borderColor: revenueLabels.map(() => {
+                let r = Math.random() * 255;
+                let g = Math.random() * 255;
+                let b = Math.random() * 255;
+                return `rgba(${r},${g},${b}, 1)`;
+            }),
+            borderWidth: 1
+        }]
+    };
+
+    // Dữ liệu và cấu hình biểu đồ số lần đặt món ăn
+    const foodOrderChartData = {
+        labels: foodOrderLabels,
+        datasets: [{
+            label: 'Food Orders',
+            data: foodOrderData,
+            backgroundColor: foodOrderLabels.map(() => {
+                let r = Math.random() * 255;
+                let g = Math.random() * 255;
+                let b = Math.random() * 255;
+                return `rgba(${r},${g},${b}, 0.3)`;
+            }),
+            borderColor: foodOrderLabels.map(() => {
+                let r = Math.random() * 255;
+                let g = Math.random() * 255;
+                let b = Math.random() * 255;
+                return `rgba(${r},${g},${b}, 1)`;
+            }),
+            borderWidth: 1
+        }]
+    };
+
+    // Vẽ biểu đồ số lượng đơn hàng
+    const ctx1 = document.getElementById('orderCountChart').getContext('2d');
     new Chart(ctx1, {
+        type: 'bar',
+        data: orderCountChartData,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Vẽ biểu đồ doanh thu
+    const ctx2 = document.getElementById('revenueChart').getContext('2d');
+    new Chart(ctx2, {
         type: 'bar',
         data: revenueChartData,
         options: {
@@ -138,8 +126,8 @@
     });
 
     // Vẽ biểu đồ số lần đặt món ăn
-    const ctx2 = document.getElementById('foodOrderChart').getContext('2d');
-    new Chart(ctx2, {
+    const ctx3 = document.getElementById('foodOrderChart').getContext('2d');
+    new Chart(ctx3, {
         type: 'bar',
         data: foodOrderChartData,
         options: {
@@ -150,19 +138,11 @@
             }
         }
     });
-
-    // Vẽ biểu đồ số lượng đơn hàng
-    const ctx3 = document.getElementById('orderCountChart').getContext('2d');
-    new Chart(ctx3, {
-        type: 'bar',
-        data: orderCountChartData,
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
 </script>
+
+<form method="get" action="">
+    <label for="year">Select Year:</label>
+    <input type="number" id="year" name="year" value="{{ year }}">
+    <button type="submit">Filter</button>
+</form>
 {% endblock %}
