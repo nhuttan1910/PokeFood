@@ -25,7 +25,7 @@ const Login = ({ onLoginSuccess }) => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error_description || 'Invalid credentials');
+        throw new Error(errorData.error_description || 'Thông tin không hợp lệ!');
       }
 
       const data = await response.json();

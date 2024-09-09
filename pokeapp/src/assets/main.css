@@ -735,7 +735,7 @@
 .login-container h2 {
     margin-bottom: 20px;
     font-size: 30px;
-    color: #333;
+    color: #F88601;
     text-align: center;
 }
 
@@ -758,7 +758,7 @@
 
 .form-group input {
     width: 100%;
-    padding: 10px;
+    padding: 5px;
     border-radius: 5px;
     font-size: 16px;
     box-sizing: border-box;
@@ -793,7 +793,7 @@
 }
 
 .login-button:hover {
-    background-color: #e74c3c;
+    background-color: #357ae8;
 }
 
 .login-buttons {
@@ -813,10 +813,6 @@
     transition: background-color 0.3s;
 }
 
-
-.login-button:hover {
-    background-color: #e74c3c;
-}
 
 .register-button {
     background-color: #4caf50;
@@ -845,7 +841,7 @@
 }
 
 .google-login-button:hover {
-    background-color: #357ae8;
+    background-color: #e74c3c;
 }
 
 
@@ -855,7 +851,86 @@
 }
 
 .nav-item-icon {
-  margin-right: 8px;
+  margin-right: 5px;
 }
+
+.register-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 30px auto;
+}
+
+.register-container h2 {
+    margin-bottom: 20px;
+    font-size: 30px;
+    color: #f88601;
+    text-align: center;
+}
+
+.register-container form {
+    width: 100%;
+}
+
+.form-group {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.register-container input[type="text"],
+.register-container input[type="email"],
+.register-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.register-container input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+    margin-bottom: 10px;
+}
+
+.register-container input[type="text"]:focus,
+.register-container input[type="email"]:focus,
+.register-container input[type="password"]:focus,
+.register-container input[type="file"]:focus {
+    border-color: #f85849;
+    outline: none;
+}
+
+.error-message, .success-message {
+    font-size: 14px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.error-message {
+    color: #e74c3c;
+}
+
+.success-message {
+    color: #4caf50;
+}
+
+
+
+
 
 

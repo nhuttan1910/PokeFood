@@ -5,6 +5,7 @@ import Footer from "./layout/Footer";
 import Home from "./components/Home";
 import Menu from "./components/Menu";
 import Login from "./components/Login";
+import Register from "./components/Register";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,6 +38,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/menu" element={<Menu isLoggedIn={isLoggedIn} />} />
         <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
       <Footer />
     </BrowserRouter>
