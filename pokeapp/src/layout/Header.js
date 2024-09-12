@@ -92,7 +92,9 @@ const Header = ({ isLoggedIn, onLogout }) => {
           </div>
           <div className="header-cart">
             <div className="header-cart-wrap">
-              <FontAwesomeIcon icon={faCartShopping} className="header-cart-icon" />
+               <Link className="nav-item-link" to="/cart">
+                <FontAwesomeIcon icon={faCartShopping} className="header-cart-icon" />
+               </Link>
             </div>
           </div>
         </div>

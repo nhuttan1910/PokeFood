@@ -6,6 +6,8 @@ import Home from "./components/Home";
 import Menu from "./components/Menu";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Cart from "./components/Cart";
+import Order from "./components/Order";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,6 +39,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/menu" element={<Menu isLoggedIn={isLoggedIn} />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/order" element={<Order />} />
         <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
         <Route path="/register" element={<Register />} />
       </Routes>

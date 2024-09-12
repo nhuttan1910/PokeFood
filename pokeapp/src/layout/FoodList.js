@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../assets/main.css';
 import '../assets/base.css';
 import '../assets/home.css';
+import '../assets/order.css';
 
 const FoodList = ({ categoryId }) => {
   const [foods, setFoods] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [notification, setNotification] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -65,11 +68,15 @@ const FoodList = ({ categoryId }) => {
         throw new Error(errorData.error || 'Đã xảy ra lỗi khi thêm vào giỏ hàng. Vui lòng thử lại sau!');
       }
 
-      alert("Thêm vào giỏ hàng thành công!");
+      setNotification(true);
     } catch (error) {
       console.error("Error adding to cart:", error);
       alert(error.message);
     }
+  };
+
+  const handleNotification = () => {
+    setNotification(false);
   };
 
   if (loading) {
@@ -102,6 +109,15 @@ const FoodList = ({ categoryId }) => {
           </div>
         </div>
       </div>
+
+      {notification && (
+        <div className="notification-container">
+          <div className="notification-content">
+            <p>Đã thêm vào giỏ hàng thành công!</p>
+            <button className="close-notification-btn" onClick={handleNotification}>Đóng</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
