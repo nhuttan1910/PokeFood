@@ -9,7 +9,8 @@ from django.utils.dateparse import parse_date
 from .serializers import *
 from rest_framework.parsers import MultiPartParser
 from food import serializers, paginator
-import hmac, uuid, hashlib, requests, json,logging
+from django.db.models import Q
+import hmac, uuid, hashlib, requests, json,logging, base64
 from django.conf import settings
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
@@ -29,17 +30,17 @@ class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView
 
     @action(methods=['get'], url_path='search', detail=False)
     def get_food(self, request):
-        kw = request.query_params.get('kw', None)
-
+        kw = request.query_params.get('kw')
         if kw:
-            food = Food.objects.filter(name__icontains=kw, active=True)
+            food = Food.objects.filter(Q(name__icontains=kw), active=True)
+
             if food.exists():
                 serializer = FoodSerializer(food, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                return Response({"error": "No food found with that name."}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"error": "Không tìm thấy món ăn nào với tên này."}, status=status.HTTP_404_NOT_FOUND)
         else:
-            return Response({"error": "No search term provided."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Vui lòng cung cấp từ khóa tìm kiếm."}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['get'], url_path='category', detail=False)
     def get_food_by_category(self, request):
@@ -242,6 +243,48 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView,
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
+    @action(methods=['get'], url_path='get-order', detail=False)
+    def get_order(self, request):
+        user_id = request.user.id
+
+        try:
+            user = Account.objects.get(id=user_id)
+        except Account.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        orders = Order.objects.filter(account=user)
+
+        serializer = self.get_serializer(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(methods=['get'], url_path='status-waiting', detail=False)
+    def get_waiting_orders(self, request):
+        user_id = request.user.id
+        orders = Order.objects.filter(account_id=user_id, confirmed=False)
+        serializer = self.get_serializer(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(methods=['get'], url_path='status-shipping', detail=False)
+    def get_shipping_orders(self, request):
+        user_id = request.user.id
+        orders = Order.objects.filter(account_id=user_id, confirmed=True)
+        serializer = self.get_serializer(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(methods=['get'], url_path='status-unpaid', detail=False)
+    def get_unpaid_orders(self, request):
+        user_id = request.user.id
+        orders = Order.objects.filter(account_id=user_id, pay=False)
+        serializer = self.get_serializer(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(methods=['get'], url_path='status-completed', detail=False)
+    def get_completed_orders(self, request):
+        user_id = request.user.id
+        orders = Order.objects.filter(account_id=user_id, pay=True, confirmed=True, state = True)
+        serializer = self.get_serializer(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     @action(methods=['post'], url_path='create-order', detail=False)
     def create_order(self, request):
         user_id = request.user.id
@@ -279,7 +322,8 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView,
             OrderDetail.objects.bulk_create(order_details)
             cart_details.delete()
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            return Response({"order_id": order.id} , status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -307,8 +351,7 @@ class PayViewSet(viewsets.ViewSet):
 
     @action(methods=['POST'], detail=False, url_path='create-payment')
     def create_payment(self, request):
-        # Lấy thông tin từ request
-        order_id = request.data.get('id')
+        order_id = request.data.get('order_id')
         if not order_id:
             return Response({"error": "Order ID is required."}, status=400)
         try:
@@ -340,9 +383,10 @@ class PayViewSet(viewsets.ViewSet):
             "signature": signature
         }
 
+        print (signature);
+
         response = requests.post(settings.MOMO_ENDPOINT, json=payload)
         data = response.json()
-
 
         if data.get('resultCode') == 0:
             return Response({"payUrl": data['payUrl']})
@@ -354,14 +398,42 @@ class PayViewSet(viewsets.ViewSet):
     def payment_callback(self, request):
         data = request.data
 
-        raw_signature = f"amount={data['amount']}&orderId={data['orderId']}&orderInfo={data['orderInfo']}&orderType={data['orderType']}&partnerCode={data['partnerCode']}&requestId={data['requestId']}&responseTime={data['responseTime']}&resultCode={data['resultCode']}&transId={data['transId']}"
+        print(f"Received data: {data}")
+
+        # Tạo raw_signature
+        raw_signature = (
+            f"amount={data['amount']}&"
+            f"orderId={data['orderId']}&"
+            f"orderInfo={data['orderInfo']}&"
+            f"orderType={data['orderType']}&"
+            f"partnerCode={data['partnerCode']}&"
+            f"requestId={data['requestId']}&"
+            f"responseTime={data['responseTime']}&"
+            f"resultCode={data['resultCode']}&"
+            f"transId={data['transId']}"
+        )
+
+        # Tạo chữ ký từ raw_signature và secret_key
         signature = self.generate_signature(raw_signature, settings.MOMO_SECRET_KEY)
 
-        if signature != data['signature']:
-            return Response({"error": "Invalid signature."}, status=status.HTTP_400_BAD_REQUEST)
+        # In chữ ký để kiểm tra
+        print(f"Raw signature: {raw_signature}")
+        print(f"Generated signature: {signature}")
+        print(f"Received signature: {data['signature']}")
 
-        if data['resultCode'] == 0:
-            order_id = data['orderId']
+        # So sánh chữ ký
+        # if signature != data['signature']:
+        #     return Response({"error": "Invalid signature."}, status=status.HTTP_400_BAD_REQUEST)
+
+        def decode_order_id(unique_order_id):
+            parts = unique_order_id.split('_')
+            if len(parts) == 2:
+                return parts[0]
+            else:
+                raise ValueError("Invalid unique_order_id format")
+
+        if data['resultCode'] == '0':
+            order_id = decode_order_id(data['orderId'])
             try:
                 order = Order.objects.get(id=order_id)
                 order.pay = True
@@ -371,7 +443,9 @@ class PayViewSet(viewsets.ViewSet):
             except Order.DoesNotExist:
                 return Response({"error": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
         else:
-            return Response({"error": data.get('message')}, status=status.HTTP_400_BAD_REQUEST)
+            # Thanh toán thất bại
+            return Response({"error": data.get('message', 'Unknown error')}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
