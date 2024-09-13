@@ -6,6 +6,7 @@ import { faMagnifyingGlass, faCartShopping, faUser, faSignOutAlt } from '@fortaw
 
 const Header = ({ isLoggedIn, onLogout }) => {
   const [logoInfo, setLogoInfo] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +25,12 @@ const Header = ({ isLoggedIn, onLogout }) => {
 
     fetchLogo();
   }, []);
+
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      navigate(`/menu?search=${searchTerm}`);
+    }
+  };
 
   return (
     <header className="header">
@@ -84,9 +91,15 @@ const Header = ({ isLoggedIn, onLogout }) => {
           </div>
           <div className="header-search">
             <div className="header-search-wrap">
-              <input type="text" className="header-search-input" placeholder="Nhập để tìm kiếm" />
+              <input
+                type="text"
+                className="header-search-input"
+                placeholder="Nhập để tìm kiếm"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
-            <button className="header-search-btn">
+            <button className="header-search-btn" onClick={handleSearch}>
               <FontAwesomeIcon icon={faMagnifyingGlass} className="header-search-icon" />
             </button>
           </div>

@@ -1,6 +1,6 @@
 .cart-container {
     padding: 20px;
-    max-width: 1200px;
+    max-width: 60%;
     margin: 0 auto;
 }
 
@@ -188,8 +188,6 @@
   color: #ff5722;
 }
 
-/* Thêm vào file CSS của bạn */
-
 .order-form {
   background-color: #f9f9f9;
   border: 1px solid #ddd;
@@ -257,4 +255,22 @@
 
 .order-success p {
   color: #3c763d;
+}
+
+.cart-info {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.cart-info h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom : 15px;
+}
+
+.cart-info p {
+    font-size: 16px;
+    margin-bottom : 15px;
 }

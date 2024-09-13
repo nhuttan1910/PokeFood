@@ -33,11 +33,28 @@ const Login = ({ onLoginSuccess }) => {
       }
 
       const data = await response.json();
+      const accessToken = data.access_token;
 
-      localStorage.setItem('access_token', data.access_token);
+      // Lưu access token vào localStorage
+      localStorage.setItem('access_token', accessToken);
 
-      onLoginSuccess(data.access_token);
+      // Lấy thông tin người dùng sau khi đăng nhập thành công
+      const userResponse = await fetch('http://127.0.0.1:8000/user/current-user/', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
 
+      if (!userResponse.ok) {
+        throw new Error('Không thể lấy thông tin người dùng!');
+      }
+
+      const userData = await userResponse.json();
+      console.log(userData);
+      localStorage.setItem('user', JSON.stringify(userData));
+
+      onLoginSuccess(accessToken);
       navigate('/');
     } catch (err) {
       setError(err.message);

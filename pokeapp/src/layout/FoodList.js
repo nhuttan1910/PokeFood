@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../assets/main.css';
 import '../assets/base.css';
 import '../assets/home.css';
 import '../assets/order.css';
 
-const FoodList = ({ categoryId }) => {
+const FoodList = ({ categoryId, searchTerm }) => {
   const [foods, setFoods] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,15 +15,16 @@ const FoodList = ({ categoryId }) => {
     const token = localStorage.getItem('access_token');
     setIsLoggedIn(!!token);
 
-    if (!categoryId) {
-      setFoods([]);
-      setLoading(false);
-      return;
-    }
-
     const fetchFoods = async () => {
+      setLoading(true);
       try {
-        const response = await fetch(`http://127.0.0.1:8000/food/category/?category=${categoryId}`);
+        const apiEndpoint = searchTerm
+          ? `http://127.0.0.1:8000/food/search/?kw=${searchTerm}`
+          : categoryId
+          ? `http://127.0.0.1:8000/food/category/?category=${categoryId}`
+          : `http://127.0.0.1:8000/food/`;
+
+        const response = await fetch(apiEndpoint);
         if (!response.ok) {
           throw new Error("Tải thông tin thất bại!!!");
         }
@@ -33,7 +33,7 @@ const FoodList = ({ categoryId }) => {
         setFoods(
           data.map(food => ({
             ...food,
-            image: cloudinaryBaseURL + food.image
+            image: cloudinaryBaseURL + food.image,
           }))
         );
       } catch (error) {
@@ -44,7 +44,7 @@ const FoodList = ({ categoryId }) => {
     };
 
     fetchFoods();
-  }, [categoryId]);
+  }, [categoryId, searchTerm]);
 
   const handleAddToCart = async (foodId) => {
     if (!isLoggedIn) {
@@ -58,7 +58,7 @@ const FoodList = ({ categoryId }) => {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ food_id: foodId, quantity: 1 }),
       });
@@ -114,7 +114,9 @@ const FoodList = ({ categoryId }) => {
         <div className="notification-container">
           <div className="notification-content">
             <p>Đã thêm vào giỏ hàng thành công!</p>
-            <button className="close-notification-btn" onClick={handleNotification}>Đóng</button>
+            <div className="notification-buttons">
+              <button className="close-notification-btn" onClick={handleNotification}>Đóng</button>
+            </div>
           </div>
         </div>
       )}

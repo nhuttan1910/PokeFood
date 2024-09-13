@@ -5,19 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd628f97-2a33-4917-9633-da1ea7f6c5b7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/assets/cart.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/login.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/order.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/register.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Cart.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Order.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pkfood/foods/food/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/../pkfood/foods/food/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/account.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/contact.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/payment.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Account.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Contact.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Payment.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../pkfood/foods/food/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../pkfood/foods/food/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pkfood/foods/foods/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../pkfood/foods/foods/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/cart.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/cart.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/assets/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/order.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/order.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Register.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Register.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Menu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Order.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Order.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/CateList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/CateList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/Contruction.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/Contruction.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layout/FoodList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/FoodList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layout/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/Header.js" afterDir="false" />
     </list>
@@ -40,14 +45,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;NhutTan&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/PokeFood/pokeapp&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "NhutTan",
+    "last_opened_file_path": "C:/PokeFood/pkfood/foods"
   }
-}</component>
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

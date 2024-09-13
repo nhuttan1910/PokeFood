@@ -88,20 +88,41 @@
 }
 
 .notification-content p {
-    font-size: 20px;
+  font-size: 20px;
+  margin: 0;
 }
 
-.close-notification-btn {
-  background: #ff5722;
-  color: #fff;
+.notification-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.close-notification-btn,
+.pay-now-btn {
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  margin-top: 15px;
+  margin: 0;
+}
+
+.close-notification-btn {
+  background: #ff5722;
+  color: #fff;
 }
 
 .close-notification-btn:hover {
   background: #e64a19;
+}
+
+.pay-now-btn {
+  background: #28a745;
+  color: #fff;
+}
+
+.pay-now-btn:hover {
+  background: #218838;
 }

@@ -417,7 +417,8 @@
 /* container */
 
 .container-body {
-    width: 40%;
+    width: 70%;
+    height : 160px;
     margin: 20px auto;
     text-align: center;
     border: solid 3px rgb(248, 88, 73);
@@ -426,24 +427,20 @@
     background-color: #F5F5DC;
 }
 
-.container-body-title {
-    text-align: center;
-    font-size: 4rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
 .container-body-list {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    flex-wrap: nowrap;
+    justify-content: center; /* Căn các phần tử bắt đầu từ bên trái */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    gap: 16px; /* Khoảng cách giữa các phần tử */
     padding: 0;
-
     list-style-type: none;
+    margin: 0; /* Xóa margin để tránh bị lệch */
 }
 
 .container-body-item {
-    width: 32%;
+    flex: 0 0 auto;
+    width: auto;
     margin-bottom: 20px;
     box-sizing: border-box;
 }
@@ -459,7 +456,8 @@
 }
 
 .container-body-item-img img {
-    width: 70%;
+    width: 80%;
+    max-width: 120px;
     height: auto;
     border-radius: 5px;
     border: 3px solid transparent;
@@ -469,10 +467,9 @@
     display: block;
     color: var(--text-color);
     font-size: 1.4rem;
-    margin-top: 10px;
+    margin-top: 8px;
     font-weight: 700;
 }
-
 
 .container-body-item-img-selected img {
     border: solid 3px rgb(248, 88, 73);
@@ -481,7 +478,6 @@
 .container-body-item-text-selected {
     color: rgb(248, 88, 73);
 }
-
 
 .container-header {
     width: 992px;

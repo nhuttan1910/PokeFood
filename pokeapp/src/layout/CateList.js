@@ -41,7 +41,6 @@ const CateList = ({ onCategorySelect, selectedCategory }) => {
 
   return (
     <div className="container-body">
-      <h2 className="container-body-title">Menu</h2>
       <ul className="container-body-list">
         {categories.map(category => (
           <li

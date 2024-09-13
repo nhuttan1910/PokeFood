@@ -8,6 +8,9 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Cart from "./components/Cart";
 import Order from "./components/Order";
+import Payment from './components/Payment';
+import Contact from './components/Contact';
+import Account from './components/Account';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -29,6 +32,7 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
+    localStorage.removeItem('user');
     setToken(null);
     setIsLoggedIn(false);
   };
@@ -41,8 +45,11 @@ function App() {
         <Route path="/menu" element={<Menu isLoggedIn={isLoggedIn} />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/order" element={<Order />} />
+        <Route path="/payment-return" element={<Payment />} />
         <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
         <Route path="/register" element={<Register />} />
+        <Route  path="/account" element={<Account />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
       <Footer />
     </BrowserRouter>
