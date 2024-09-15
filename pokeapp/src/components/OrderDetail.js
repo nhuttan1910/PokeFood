@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
 const api = 'http://127.0.0.1:8000/'
 const OrderDetail = ({ order }) => {
     const [orderDetails, setOrderDetails] = useState([]);
@@ -16,7 +17,8 @@ const OrderDetail = ({ order }) => {
     }, [order]);
 
     return (
-        <div>
+        
+        <div className="order-details-container">
             <h3>Order Details for Order #{order.id}</h3>
             <ul>
                 {orderDetails.map(detail => (

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import OrderDetail from './OrderDetail';
-
+import '../assets/OrderList.css';
 const api = 'http://127.0.0.1:8000/';
 
 const OrderList = () => {
@@ -36,7 +36,7 @@ const OrderList = () => {
     };
 
     return (
-        <div>
+        <div className="order-list-container">
             <h2>Order List</h2>
             <ul>
                 {orders.map(order => (
