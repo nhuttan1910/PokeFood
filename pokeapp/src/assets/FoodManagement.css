@@ -1,0 +1,113 @@
+/* General styling for the food management page */
+.food-manage {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px;
+  gap: 20px;
+}
+
+/* Style for each column */
+.column {
+  flex: 1;
+}
+
+/* Create Food Form styling */
+.create-food-form {
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* Edit Food Form styling */
+.edit-food-form {
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Title styling */
+h2 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+/* Input field styling */
+input[type="text"],
+input[type="number"],
+select,
+input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Button styling */
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Cancel button styling */
+.cancel-button {
+  background-color: #6c757d;
+}
+
+.cancel-button:hover {
+  background-color: #5a6268;
+}
+
+/* Food list styling */
+.food-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.food-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.food-item img {
+  max-width: 150px;
+  max-height: 150px;
+  margin-right: 20px;
+}
+
+.food-info {
+  flex-grow: 1;
+}
+
+.food-info h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.food-item-actions {
+  display: flex;
+  gap: 10px;
+}

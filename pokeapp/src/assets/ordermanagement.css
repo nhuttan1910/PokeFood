@@ -1,0 +1,90 @@
+/* General container for the order list and order details */
+.order-list-container {
+    padding: 20px;
+}
+
+/* Styling for filter buttons */
+.filter-buttons {
+    margin-bottom: 20px;
+}
+
+.filter-buttons button {
+    margin-right: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Container for orders and details with flexbox */
+.orders-and-details {
+    display: flex;
+}
+
+/* Styling for the list of orders */
+.orders-list {
+    width: 70%; /* 70% of the width for the orders list */
+    margin-right: 20px; /* Space between orders list and details */
+    list-style-type: none; /* Remove default list styling */
+    padding: 0; /* Remove default padding */
+}
+
+.orders-list li {
+    display: flex; /* Flexbox to align items */
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Space out the items */
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* Border between orders */
+    margin-bottom: 10px; /* Space between items */
+    position: relative; /* Position relative for absolute children */
+}
+
+.orders-list li .show-details-button {
+    margin-left: auto; /* Push button to the right */
+}
+
+/* Styling for the order details */
+.order-details {
+    width: 30%; /* 30% of the width for the order details */
+    border-left: 2px solid #ddd; /* Border to separate from the orders list */
+    padding-left: 20px;
+}
+
+/* Styling for order details container */
+.order-details-card {
+    padding: 10px;
+    background-color: #f9f9f9; /* Light background for better readability */
+    border-radius: 4px; /* Rounded corners for the details box */
+}
+
+/* Styling for order details list */
+.order-details-card ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.order-details-card li {
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Styling for payment actions */
+.payment-actions {
+    margin-top: 20px;
+}
+
+.payment-actions button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Additional styling for headers */
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}

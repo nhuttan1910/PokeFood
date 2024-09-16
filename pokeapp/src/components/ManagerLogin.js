@@ -1,3 +1,4 @@
+// src/components/ManagerLogin.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../assets/main.css';
@@ -5,7 +6,7 @@ import '../assets/base.css';
 import '../assets/home.css';
 import '../assets/login.css';
 
-const Login = ({ onLoginSuccess }) => {
+const ManagerLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -22,11 +23,8 @@ const Login = ({ onLoginSuccess }) => {
           grant_type: 'password',
           username: username,
           password: password,
-          //client_id: 'JVueeMClIZzEAiLQB0efRHvFQuN9x2nfZe2CFfJ0',
-          //client_secret: 'vKfJNyVrvfTYvzhjtx5yioGVG3g0csXzXBRdwW5dKLv2QvlXBHEbqRJylQsyyEak0L1x0S1hyN3bxc8n3XIxh8Ua0HtCT95WsDLRxgVwOAZtmKJtNDgWrr6ABsgy15r9',
           client_id: 'wQH1wAdg0DCu6Z3nTZYF4vIJTOQpHWVvUO6X5qAK',
           client_secret: 'Hxc5hmxcODDfMbLYbpfhrD2i6vWui85QpCvOcYDJ9BL1yn6YSkcSWz2ZIIXY92iEnJTfmvbHgUHPU5gYI7zou6XvAqintfZGwiUlAFuzRQzydnecpzCXDM21ykKjwIju',
-
         }),
       });
 
@@ -53,12 +51,15 @@ const Login = ({ onLoginSuccess }) => {
         throw new Error('Không thể lấy thông tin người dùng!');
       }
 
-      const userData = await userResponse.json();
-      console.log(userData);
-      localStorage.setItem('user', JSON.stringify(userData));
+      const userData = await userResponse.json(); // Đọc dữ liệu dưới dạng JSON
+      localStorage.setItem('user', JSON.stringify(userData)); // Lưu dữ liệu dưới dạng chuỗi JSON
 
-      onLoginSuccess(accessToken);
-      navigate('/');
+      // Kiểm tra xem người dùng có phải là admin không
+      if (userData.username === "admin") {
+        navigate('/manager'); // Điều hướng đến trang quản lý nếu là admin
+      } else {
+        throw new Error('Không có quyền truy cập vào trang quản lý.');
+      }
     } catch (err) {
       setError(err.message);
     }
@@ -66,7 +67,7 @@ const Login = ({ onLoginSuccess }) => {
 
   return (
     <div className="login-container">
-      <h2>Login</h2>
+      <h2>Manager Login</h2>
       <form onSubmit={handleLogin}>
         <div className="form-group">
           <label htmlFor="username">Username:</label>
@@ -91,25 +92,10 @@ const Login = ({ onLoginSuccess }) => {
         {error && <p className="error-message">{error}</p>}
         <div className="login-buttons">
           <button type="submit" className="login-button">Login</button>
-          <button
-            type="button"
-            className="register-button"
-            onClick={() => navigate('/register')}
-          >
-            Register
-          </button>
-        </div>
-        <div className="google-login">
-          <button
-            type="button"
-            className="google-login-button"
-          >
-            Login with Google
-          </button>
         </div>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default ManagerLogin;

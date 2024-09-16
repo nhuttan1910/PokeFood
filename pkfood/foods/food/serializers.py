@@ -60,7 +60,7 @@ class CartDetailSerializer(ModelSerializer):
 class OrderSerializer(ModelSerializer):
     class Meta:
         model = Order
-        fields = ['id', 'confirmed', 'state', 'pay', 'pay_date','address', 'account']
+        fields = ['id', 'confirmed', 'state', 'pay', 'pay_date','address','created_date', 'account']
 
 
 class OrderDetailSerializer(ModelSerializer):

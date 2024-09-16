@@ -24,7 +24,7 @@ def index(request):
     return HttpResponse("Poke Shop")
 
 
-class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView):
+class FoodViewSet(viewsets.ViewSet, generics.ListAPIView, generics.CreateAPIView, generics.RetrieveAPIView, generics.UpdateAPIView):
     queryset = Food.objects.all()
     serializer_class = FoodSerializer
 
@@ -239,7 +239,8 @@ class CartDetailsViewSet(viewsets.ViewSet, generics.ListAPIView,
 
 class OrderViewSet(viewsets.ViewSet, generics.ListAPIView,
                   generics.CreateAPIView,
-                  generics.RetrieveAPIView):
+                  generics.RetrieveAPIView,
+                  generics.UpdateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
@@ -331,7 +332,7 @@ class OrderViewSet(viewsets.ViewSet, generics.ListAPIView,
     def confirm(self, request):
         order_id = request.data.get('order_id')
         order = Order.objects.get(id=order_id)
-        order.is_confirmed = True
+        order.confirmed = True
         order.save()
         return Response(OrderSerializer(order).data, status=status.HTTP_200_OK)
 
@@ -342,6 +343,15 @@ class OrderDetailViewSet(viewsets.ViewSet, generics.ListAPIView,
                        generics.RetrieveAPIView):
         queryset = OrderDetail.objects.all()
         serializer_class = OrderDetailSerializer
+
+        @action(methods=['get'],url_path='order', detail=False)
+        def get_detail_by_order(self, request):
+            order = request.query_params.get('order', None)
+            if order is not None:
+                details = OrderDetail.objects.filter(order=order)
+                return Response(OrderDetailSerializer(details, many=True).data, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "Order parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PayViewSet(viewsets.ViewSet):

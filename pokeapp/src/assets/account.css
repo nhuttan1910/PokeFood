@@ -1,56 +1,27 @@
-
 .account-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-}
-
-.account-details {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  background-color: #F5F5DC;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.account-details h2 {
-  font-size: 40px;
-  margin-bottom: 10px;
-}
-
-.profile-image img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 3px solid orange;
-  object-fit: cover;
-}
-
-.profile-info h3 {
-  font-size : 30px;
-  margin : 10px auto;
-}
-
-.profile-info p {
-font-size : 18px;
-  margin: 5px 0;
-}
-
-.profile-info strong {
-  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 }
 
 .order-info {
+  flex: 7; /* Chia tỉ lệ 7 */
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
   background-color: #f9f9f9;
 }
 
-.order-info h2 {
-  font-size: 24px;
-  margin-bottom: 10px;
+.order-details {
+  flex: 3; /* Chia tỉ lệ 3 */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #fff;
+  display: none; /* Ẩn chi tiết đơn hàng mặc định */
 }
 
 .order-list {
@@ -63,19 +34,6 @@ font-size : 18px;
   padding: 15px;
   background-color: #fff;
   margin-bottom: 15px;
-}
-
-.order-item h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.order-item p {
-  margin: 5px 0;
-}
-
-.order-items {
-  margin-top: 10px;
 }
 
 .order-detail-item {
@@ -105,7 +63,6 @@ font-size : 18px;
 .order-item-details p {
   margin: 3px 0;
 }
-
 
 .order-filters {
   display: flex;
@@ -159,4 +116,3 @@ font-size : 18px;
 .order-filters button:nth-child(4):hover {
   background-color: #32CD32;
 }
-

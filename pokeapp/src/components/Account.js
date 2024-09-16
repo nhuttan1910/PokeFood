@@ -1,13 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import "../assets/account.css";
 
-function Account() {
+const api = 'http://127.0.0.1:8000/';
+
+const getFoodById = (foodId, foods) => {
+  const food = foods.find((item) => item.id === foodId);
+  return food ? food : { name: 'N/A', price: 0, image: '' }; // Default values
+};
+
+const Account = () => {
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
+  const [foods, setFoods] = useState([]);
+  const [orderDetails, setOrderDetails] = useState([]); // State để lưu chi tiết đơn hàng
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [apiError, setApiError] = useState(null);
-  const [filter, setFilter] = useState("waiting");
+  const [filter, setFilter] = useState('waiting');
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const cloudinaryBaseURL = "https://res.cloudinary.com/di0aqgf2u/";
 
@@ -35,17 +46,17 @@ function Account() {
 
       let url;
       switch (filter) {
-        case "waiting":
-          url = "http://127.0.0.1:8000/order/status-waiting/";
+        case 'waiting':
+          url = `${api}order/status-waiting/`;
           break;
-        case "shipping":
-          url = "http://127.0.0.1:8000/order/status-shipping/";
+        case 'shipping':
+          url = `${api}order/status-shipping/`;
           break;
-        case "unpaid":
-          url = "http://127.0.0.1:8000/order/status-unpaid/";
+        case 'unpaid':
+          url = `${api}order/status-unpaid/`;
           break;
-        case "completed":
-          url = "http://127.0.0.1:8000/order/status-completed/";
+        case 'completed':
+          url = `${api}order/status-completed/`;
           break;
         default:
           return;
@@ -70,6 +81,53 @@ function Account() {
     fetchOrders();
   }, [user, filter]);
 
+  useEffect(() => {
+    const fetchFoods = async () => {
+      try {
+        const response = await fetch(`${api}food/`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Lỗi khi lấy thông tin thực phẩm.");
+        }
+        const data = await response.json();
+        setFoods(data);
+      } catch (e) {
+        setApiError(e.message);
+      }
+    };
+
+    fetchFoods();
+  }, []);
+
+  // Hàm để lấy chi tiết đơn hàng dựa vào account và order
+  const getOrderDetailsByAccount = async (orderId) => {
+    try {
+      const response = await axios.get(`${api}order-details/order/?order=${orderId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+      setOrderDetails(response.data); // Cập nhật chi tiết đơn hàng vào state
+    } catch (e) {
+      setApiError("Lỗi khi lấy chi tiết đơn hàng.");
+    }
+  };
+
+  // Hàm xử lý khi bấm nút "Xem chi tiết"
+  const handleShowDetails = (order) => {
+    setSelectedOrder(order);
+    getOrderDetailsByAccount(order.id); // Gọi hàm để lấy chi tiết đơn hàng
+  };
+
+  // Hàm chuyển đổi filter và reset chi tiết đơn hàng
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+    setSelectedOrder(null); // Reset chi tiết đơn hàng khi chuyển bộ lọc
+  };
+
   if (loading) {
     return <p>Đang tải dữ liệu...</p>;
   }
@@ -90,25 +148,19 @@ function Account() {
           <img src={`${cloudinaryBaseURL}${user.avatar}`} alt="Profile" />
         </div>
         <div className="profile-info">
-          <h3>
-            <strong></strong> {user.username}
-          </h3>
-          <p>
-            <strong>Phone:</strong> {user.phone}
-          </p>
-          <p>
-            <strong>Email:</strong> {user.email}
-          </p>
+          <h3>{user.username}</h3>
+          <p><strong>Phone:</strong> {user.phone}</p>
+          <p><strong>Email:</strong> {user.email}</p>
         </div>
       </div>
 
       <div className="order-info">
         <h2>Đơn hàng của bạn</h2>
         <div className="order-filters">
-          <button onClick={() => setFilter("waiting")}>Chưa xác nhận</button>
-          <button onClick={() => setFilter("shipping")}>Đang giao</button>
-          <button onClick={() => setFilter("unpaid")}>Chưa thanh toán</button>
-          <button onClick={() => setFilter("completed")}>Hoàn thành</button>
+          <button onClick={() => handleFilterChange("waiting")}>Chưa xác nhận</button>
+          <button onClick={() => handleFilterChange("shipping")}>Đang giao</button>
+          <button onClick={() => handleFilterChange("unpaid")}>Chưa thanh toán</button>
+          <button onClick={() => handleFilterChange("completed")}>Hoàn thành</button>
         </div>
 
         {apiError && <p>Có lỗi xảy ra khi lấy đơn hàng: {apiError}</p>}
@@ -119,20 +171,21 @@ function Account() {
             {orders.map((order) => (
               <div className="order-item" key={order.id}>
                 <h3>Đơn hàng #{order.id}</h3>
-                <p>Ngày đặt hàng: {new Date(order.pay_date).toLocaleDateString()}</p>
+                <p>Ngày đặt hàng: {new Date(order['created_date']).toLocaleDateString()}</p>
                 <div className="order-items">
                   {(order.order_details || []).map((detail) => {
-                    const totalPrice = detail.food.price * detail.quantity;
+                    const food = getFoodById(detail.food, foods);
+                    const totalPrice = food.price * detail.quantity;
                     return (
                       <div className="order-detail-item" key={detail.id}>
                         <img
-                          src={`${cloudinaryBaseURL}${detail.food.image}`}
-                          alt={detail.food.name}
+                          src={`${cloudinaryBaseURL}${food.image}`}
+                          alt={food.name}
                           className="order-item-image"
                         />
                         <div className="order-item-details">
-                          <h4>{detail.food.name}</h4>
-                          <p>Giá: {detail.food.price.toLocaleString()} VND</p>
+                          <h4>{food.name}</h4>
+                          <p>Giá: {food.price.toLocaleString()} VND</p>
                           <p>Số lượng: {detail.quantity}</p>
                           <p>Tổng cộng: {totalPrice.toLocaleString()} VND</p>
                         </div>
@@ -140,13 +193,41 @@ function Account() {
                     );
                   })}
                 </div>
+                <button className="show-details-button" onClick={() => handleShowDetails(order)}>Xem chi tiết</button>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {selectedOrder && (
+        <div className="order-details" style={{ display: 'block' }}>
+          <h2>Chi tiết đơn hàng #{selectedOrder.id}</h2>
+          <div className="order-items">
+            {orderDetails.map((detail) => {
+              const food = getFoodById(detail.food, foods);
+              const totalPrice = food.price * detail.quantity;
+              return (
+                <div className="order-detail-item" key={detail.id}>
+                  <img
+                    src={`${cloudinaryBaseURL}${food.image}`}
+                    alt={food.name}
+                    className="order-item-image"
+                  />
+                  <div className="order-item-details">
+                    <h4>{food.name}</h4>
+                    <p>Giá: {food.price.toLocaleString()} VND</p>
+                    <p>Số lượng: {detail.quantity}</p>
+                    <p>Tổng cộng: {totalPrice.toLocaleString()} VND</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default Account;
