@@ -5,26 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd628f97-2a33-4917-9633-da1ea7f6c5b7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/assets/account.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/contact.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/payment.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Account.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Contact.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Payment.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pkfood/foods/food/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../pkfood/foods/food/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pkfood/foods/foods/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../pkfood/foods/foods/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/cart.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/cart.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/order.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/order.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Menu.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Order.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Order.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/CateList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/CateList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/Contruction.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/Contruction.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/FoodList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/FoodList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/Header.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +30,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "NhutTan",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/PokeFood/pkfood/foods"
   }
 }]]></component>
