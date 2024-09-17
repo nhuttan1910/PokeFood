@@ -1,0 +1,155 @@
+.account-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.order-info {
+  flex: 7; /* Chia tỉ lệ 7 */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.order-details {
+  flex: 3; /* Chia tỉ lệ 3 */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #fff;
+  display: none; /* Ẩn chi tiết đơn hàng mặc định */
+}
+
+.order-list {
+  margin-top: 20px;
+}
+
+.order-item {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #fff;
+  margin-bottom: 15px;
+}
+
+.order-detail-item {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.order-item-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.order-item-details {
+  flex: 1;
+}
+
+.order-item-details h4 {
+  font-size: 18px;
+  margin: 5px 0;
+}
+
+.order-item-details p {
+  margin: 3px 0;
+}
+
+.order-filters {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.order-filters button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.order-filters button:nth-child(1) {
+  background-color: #FFA07A;
+  color: #fff;
+}
+
+.order-filters button:nth-child(1):hover {
+  background-color: #FF7F50;
+}
+
+.order-filters button:nth-child(2) {
+  background-color: #87CEFA;
+  color: #fff;
+}
+
+.order-filters button:nth-child(2):hover {
+  background-color: #00BFFF;
+}
+
+.order-filters button:nth-child(3) {
+  background-color: #FFD700;
+  color: #fff;
+}
+
+.order-filters button:nth-child(3):hover {
+  background-color: #FFA500;
+}
+
+.order-filters button:nth-child(4) {
+  background-color: #90EE90;
+  color: #fff;
+}
+
+.order-filters button:nth-child(4):hover {
+  background-color: #32CD32;
+}
+
+/* Nút "Đã nhận hàng" cho đơn hàng đang giao */
+.confirm-received-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #FF8C00; /* Màu cam cho nút */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.confirm-received-button:hover {
+  background-color: #FF4500; /* Màu cam đậm khi hover */
+}
+
+.show-details-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4682B4; /* Màu xanh cho nút xem chi tiết */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.show-details-button:hover {
+  background-color: #1E90FF; /* Màu xanh sáng khi hover */
+}

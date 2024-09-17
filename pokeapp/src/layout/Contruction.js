@@ -19,10 +19,14 @@ const Construction = () => {
         }
         const data = await response.json();
         console.log(data);
+        localStorage.setItem("storeInfo", JSON.stringify(data));
 
+        const storedInfo = localStorage.getItem("storeInfo");
+        console.log(storedInfo);
 
         if (Array.isArray(data) && data.length > 0) {
           setStoreInfo(data[0]);
+
         } else {
           throw new Error("Invalid data format");
         }

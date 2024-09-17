@@ -13,7 +13,7 @@ const CateList = ({ onCategorySelect, selectedCategory }) => {
       try {
         const response = await fetch("http://127.0.0.1:8000/category/");
         if (!response.ok) {
-          throw new Error("Failed to fetch categories");
+          throw new Error("Tải thông tin thất bại!!!");
         }
         const data = await response.json();
         const cloudinaryBaseURL = 'https://res.cloudinary.com/di0aqgf2u/';
@@ -41,7 +41,6 @@ const CateList = ({ onCategorySelect, selectedCategory }) => {
 
   return (
     <div className="container-body">
-      <h2 className="container-body-title">Menu</h2>
       <ul className="container-body-list">
         {categories.map(category => (
           <li
