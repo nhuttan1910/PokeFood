@@ -13,7 +13,7 @@ const Account = () => {
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
   const [foods, setFoods] = useState([]);
-  const [orderDetails, setOrderDetails] = useState([]); // State để lưu chi tiết đơn hàng
+  const [orderDetails, setOrderDetails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [apiError, setApiError] = useState(null);
@@ -72,7 +72,22 @@ const Account = () => {
           throw new Error("Lỗi khi lấy đơn hàng.");
         }
         const data = await response.json();
-        setOrders(data);
+        // Lọc đơn hàng theo trạng thái nếu cần thiết
+        const filteredOrders = data.filter(order => {
+          switch (filter) {
+            case 'waiting':
+              return order.confirmed === false;
+            case 'shipping':
+              return order.confirmed === true && order.state === false;
+            case 'unpaid':
+              return order.confirmed === true && order.pay === false && order.state === false;
+            case 'completed':
+              return order.confirmed === true && order.pay === true && order.state === true;
+            default:
+              return true;
+          }
+        });
+        setOrders(filteredOrders);
       } catch (e) {
         setApiError(e.message);
       }
@@ -102,7 +117,6 @@ const Account = () => {
     fetchFoods();
   }, []);
 
-  // Hàm để lấy chi tiết đơn hàng dựa vào account và order
   const getOrderDetailsByAccount = async (orderId) => {
     try {
       const response = await axios.get(`${api}order-details/order/?order=${orderId}`, {
@@ -110,22 +124,34 @@ const Account = () => {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
-      setOrderDetails(response.data); // Cập nhật chi tiết đơn hàng vào state
+      setOrderDetails(response.data);
     } catch (e) {
       setApiError("Lỗi khi lấy chi tiết đơn hàng.");
     }
   };
 
-  // Hàm xử lý khi bấm nút "Xem chi tiết"
   const handleShowDetails = (order) => {
     setSelectedOrder(order);
-    getOrderDetailsByAccount(order.id); // Gọi hàm để lấy chi tiết đơn hàng
+    getOrderDetailsByAccount(order.id);
   };
 
-  // Hàm chuyển đổi filter và reset chi tiết đơn hàng
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
-    setSelectedOrder(null); // Reset chi tiết đơn hàng khi chuyển bộ lọc
+    setSelectedOrder(null);
+  };
+
+  const handleConfirmReceived = async (orderId) => {
+    try {
+      await axios.patch(`${api}order/${orderId}/`, { state: true }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+      alert("Xác nhận đã nhận hàng thành công!");
+      setFilter('shipping'); // Refresh the "shipping" list
+    } catch (error) {
+      console.error("Lỗi khi cập nhật trạng thái đơn hàng.", error);
+    }
   };
 
   if (loading) {
@@ -170,7 +196,7 @@ const Account = () => {
           <div className="order-list">
             {orders.map((order) => (
               <div className="order-item" key={order.id}>
-                <h3>Đơn hàng #{order.id}</h3>
+                <h3>Đơn hàng </h3>
                 <p>Ngày đặt hàng: {new Date(order['created_date']).toLocaleDateString()}</p>
                 <div className="order-items">
                   {(order.order_details || []).map((detail) => {
@@ -193,7 +219,19 @@ const Account = () => {
                     );
                   })}
                 </div>
-                <button className="show-details-button" onClick={() => handleShowDetails(order)}>Xem chi tiết</button>
+
+                {filter === "shipping" && order.state === false && (
+                  <button
+                    className="confirm-received-button"
+                    onClick={() => handleConfirmReceived(order.id)}
+                  >
+                    Đã nhận hàng
+                  </button>
+                )}
+
+                <button className="show-details-button" onClick={() => handleShowDetails(order)}>
+                  Xem chi tiết
+                </button>
               </div>
             ))}
           </div>
@@ -202,7 +240,7 @@ const Account = () => {
 
       {selectedOrder && (
         <div className="order-details" style={{ display: 'block' }}>
-          <h2>Chi tiết đơn hàng #{selectedOrder.id}</h2>
+          <h2>Chi tiết đơn hàng</h2>
           <div className="order-items">
             {orderDetails.map((detail) => {
               const food = getFoodById(detail.food, foods);

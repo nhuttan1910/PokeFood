@@ -116,3 +116,40 @@
 .order-filters button:nth-child(4):hover {
   background-color: #32CD32;
 }
+
+/* Nút "Đã nhận hàng" cho đơn hàng đang giao */
+.confirm-received-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #FF8C00; /* Màu cam cho nút */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.confirm-received-button:hover {
+  background-color: #FF4500; /* Màu cam đậm khi hover */
+}
+
+.show-details-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4682B4; /* Màu xanh cho nút xem chi tiết */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.show-details-button:hover {
+  background-color: #1E90FF; /* Màu xanh sáng khi hover */
+}
